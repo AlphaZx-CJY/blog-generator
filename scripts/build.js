@@ -246,7 +246,7 @@ function getNav(currentPage = 'home') {
                 <button id="searchToggle" class="icon-btn" aria-label="搜索 (Cmd+K)">
                     <i class="ph ph-magnifying-glass" style="font-size: 18px;"></i>
                 </button>
-                <button id="themeToggle" class="icon-btn" aria-label="切换主题">◐</button>
+                <button id="themeToggle" class="icon-btn" aria-label="切换主题"><i class="ph ph-sun" style="font-size: 18px;"></i></button>
             </div>
         </div>
         <!-- Search Panel -->
@@ -338,36 +338,7 @@ async function generateIndexPage(posts, tags, categories, archives) {
 
   const sidebarHTML = `
     <aside class="sidebar-section">
-        <div class="sidebar-block">
-            <h3 class="sidebar-title">归档</h3>
-            <ul class="sidebar-list" data-type="archive">
-                ${Array.from(archives.values()).map(a => `
-                    <li data-value="${a.key}" data-label="${a.label}">
-                        <span>${a.label}</span>
-                        <span class="sidebar-count">${a.count}</span>
-                    </li>
-                `).join('')}
-            </ul>
-        </div>
-        <div class="sidebar-block">
-            <h3 class="sidebar-title">标签</h3>
-            <div class="tag-cloud" data-type="tag">
-                ${Array.from(tags).map(([tag, count]) => `
-                    <span class="tag-item" data-value="${tag}">${tag}<span class="tag-count">${count}</span></span>
-                `).join('')}
-            </div>
-        </div>
-        <div class="sidebar-block">
-            <h3 class="sidebar-title">分类</h3>
-            <ul class="sidebar-list" data-type="category">
-                ${Array.from(categories).map(([cat, count]) => `
-                    <li data-value="${cat}" data-label="${cat}">
-                        <span>${cat}</span>
-                        <span class="sidebar-count">${count}</span>
-                    </li>
-                `).join('')}
-            </ul>
-        </div>
+      <!-- Sidebar content will be rendered by client-side JS -->
     </aside>
   `;
 

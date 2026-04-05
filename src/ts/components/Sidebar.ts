@@ -1,5 +1,5 @@
 /**
- * 侧边栏组件 - 支持多重筛选
+ * 侧边栏组件 - 支持多重筛选和展开/收起
  */
 
 import { fetchArchives, fetchTags, fetchCategories } from '../api/posts';
@@ -11,10 +11,32 @@ export interface SidebarCallbacks {
   onClearAllFilters: () => void;
 }
 
+interface ExpandState {
+  archive: boolean;
+  tag: boolean;
+  category: boolean;
+}
+
+const DEFAULT_LIMITS = {
+  archive: 10,
+  tag: 15,
+  category: 8
+};
+
 export class Sidebar {
   private container: HTMLElement;
   private callbacks: SidebarCallbacks;
   private activeFilters: Map<FilterType, string> = new Map();
+  private expandState: ExpandState = {
+    archive: false,
+    tag: false,
+    category: false
+  };
+  
+  // 存储原始数据
+  private archivesData: Archive[] = [];
+  private tagsData: [string, number][] = [];
+  private categoriesData: [string, number][] = [];
 
   constructor(container: HTMLElement, callbacks: SidebarCallbacks) {
     this.container = container;
@@ -34,13 +56,12 @@ export class Sidebar {
         fetchCategories()
       ]);
 
-      this.container.innerHTML = `
-        ${this.renderArchives(archives)}
-        ${this.renderTags(tags)}
-        ${this.renderCategories(categories)}
-      `;
+      // 保存原始数据
+      this.archivesData = archives;
+      this.tagsData = tags;
+      this.categoriesData = categories;
 
-      this.attachEventListeners();
+      this.renderContent();
     } catch (error) {
       console.error('Sidebar render error:', error);
       this.container.innerHTML = '<div class="sidebar-loading">加载失败</div>';
@@ -48,22 +69,45 @@ export class Sidebar {
   }
 
   /**
+   * 渲染内容（支持重新渲染）
+   */
+  private renderContent(): void {
+    this.container.innerHTML = `
+      ${this.renderArchives()}
+      ${this.renderTags()}
+      ${this.renderCategories()}
+    `;
+
+    this.attachEventListeners();
+  }
+
+  /**
    * 渲染归档
    */
-  private renderArchives(archives: Archive[]): string {
-    if (archives.length === 0) return '';
+  private renderArchives(): string {
+    if (this.archivesData.length === 0) return '';
+    
+    const isExpanded = this.expandState.archive;
+    const limit = isExpanded ? this.archivesData.length : DEFAULT_LIMITS.archive;
+    const displayArchives = this.archivesData.slice(0, limit);
+    const hasMore = this.archivesData.length > DEFAULT_LIMITS.archive;
     
     return `
       <div class="sidebar-block">
         <h3 class="sidebar-title">归档</h3>
         <ul class="sidebar-list" data-type="archive">
-          ${archives.map(archive => `
+          ${displayArchives.map(archive => `
             <li data-value="${archive.key}" data-label="${escapeHtml(archive.label)}">
               <span>${escapeHtml(archive.label)}</span>
               <span class="sidebar-count">${archive.count}</span>
             </li>
           `).join('')}
         </ul>
+        ${hasMore ? `
+          <button class="show-more-btn" data-type="archive" data-expanded="${isExpanded}">
+            ${isExpanded ? '收起' : `查看更多 (${this.archivesData.length - DEFAULT_LIMITS.archive})`}
+          </button>
+        ` : ''}
       </div>
     `;
   }
@@ -71,19 +115,29 @@ export class Sidebar {
   /**
    * 渲染标签
    */
-  private renderTags(tags: [string, number][]): string {
-    if (tags.length === 0) return '';
+  private renderTags(): string {
+    if (this.tagsData.length === 0) return '';
+    
+    const isExpanded = this.expandState.tag;
+    const limit = isExpanded ? this.tagsData.length : DEFAULT_LIMITS.tag;
+    const displayTags = this.tagsData.slice(0, limit);
+    const hasMore = this.tagsData.length > DEFAULT_LIMITS.tag;
     
     return `
       <div class="sidebar-block">
         <h3 class="sidebar-title">标签</h3>
         <div class="tag-cloud" data-type="tag">
-          ${tags.map(([tag, count]) => `
+          ${displayTags.map(([tag, count]) => `
             <span class="tag-item" data-value="${escapeHtml(tag)}">
               ${escapeHtml(tag)}<span class="tag-count">${count}</span>
             </span>
           `).join('')}
         </div>
+        ${hasMore ? `
+          <button class="show-more-btn" data-type="tag" data-expanded="${isExpanded}">
+            ${isExpanded ? '收起' : `查看更多 (${this.tagsData.length - DEFAULT_LIMITS.tag})`}
+          </button>
+        ` : ''}
       </div>
     `;
   }
@@ -91,20 +145,30 @@ export class Sidebar {
   /**
    * 渲染分类
    */
-  private renderCategories(categories: [string, number][]): string {
-    if (categories.length === 0) return '';
+  private renderCategories(): string {
+    if (this.categoriesData.length === 0) return '';
+    
+    const isExpanded = this.expandState.category;
+    const limit = isExpanded ? this.categoriesData.length : DEFAULT_LIMITS.category;
+    const displayCategories = this.categoriesData.slice(0, limit);
+    const hasMore = this.categoriesData.length > DEFAULT_LIMITS.category;
     
     return `
       <div class="sidebar-block">
         <h3 class="sidebar-title">分类</h3>
         <ul class="sidebar-list" data-type="category">
-          ${categories.map(([category, count]) => `
+          ${displayCategories.map(([category, count]) => `
             <li data-value="${escapeHtml(category)}" data-label="${escapeHtml(category)}">
               <span>${escapeHtml(category)}</span>
               <span class="sidebar-count">${count}</span>
             </li>
           `).join('')}
         </ul>
+        ${hasMore ? `
+          <button class="show-more-btn" data-type="category" data-expanded="${isExpanded}">
+            ${isExpanded ? '收起' : `查看更多 (${this.categoriesData.length - DEFAULT_LIMITS.category})`}
+          </button>
+        ` : ''}
       </div>
     `;
   }
@@ -162,12 +226,22 @@ export class Sidebar {
         } else {
           // 标签可以多选，不需要清除其他
           el.classList.add('active');
-          // 注意：这里简化处理，实际应该支持多标签选择
-          // 如果需要多标签选择，需要修改数据结构
           this.activeFilters.set('tag', value);
         }
         
         this.callbacks.onToggleFilter('tag', value, !isCurrentlyActive, value);
+      });
+    });
+
+    // 查看更多/收起按钮
+    this.container.querySelectorAll('.show-more-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const type = (e.currentTarget as HTMLElement).getAttribute('data-type') as keyof ExpandState;
+        if (type) {
+          this.expandState[type] = !this.expandState[type];
+          this.renderContent();
+        }
       });
     });
   }

@@ -107,9 +107,23 @@
   }
 
   // src/ts/components/Sidebar.ts
+  var DEFAULT_LIMITS = {
+    archive: 10,
+    tag: 15,
+    category: 8
+  };
   var Sidebar = class {
     constructor(container, callbacks) {
       this.activeFilters = /* @__PURE__ */ new Map();
+      this.expandState = {
+        archive: false,
+        tag: false,
+        category: false
+      };
+      // 存储原始数据
+      this.archivesData = [];
+      this.tagsData = [];
+      this.categoriesData = [];
       this.container = container;
       this.callbacks = callbacks;
     }
@@ -124,70 +138,106 @@
           fetchTags(),
           fetchCategories()
         ]);
-        this.container.innerHTML = `
-        ${this.renderArchives(archives)}
-        ${this.renderTags(tags)}
-        ${this.renderCategories(categories)}
-      `;
-        this.attachEventListeners();
+        this.archivesData = archives;
+        this.tagsData = tags;
+        this.categoriesData = categories;
+        this.renderContent();
       } catch (error) {
         console.error("Sidebar render error:", error);
         this.container.innerHTML = '<div class="sidebar-loading">\u52A0\u8F7D\u5931\u8D25</div>';
       }
     }
     /**
+     * 渲染内容（支持重新渲染）
+     */
+    renderContent() {
+      this.container.innerHTML = `
+      ${this.renderArchives()}
+      ${this.renderTags()}
+      ${this.renderCategories()}
+    `;
+      this.attachEventListeners();
+    }
+    /**
      * 渲染归档
      */
-    renderArchives(archives) {
-      if (archives.length === 0) return "";
+    renderArchives() {
+      if (this.archivesData.length === 0) return "";
+      const isExpanded = this.expandState.archive;
+      const limit = isExpanded ? this.archivesData.length : DEFAULT_LIMITS.archive;
+      const displayArchives = this.archivesData.slice(0, limit);
+      const hasMore = this.archivesData.length > DEFAULT_LIMITS.archive;
       return `
       <div class="sidebar-block">
         <h3 class="sidebar-title">\u5F52\u6863</h3>
         <ul class="sidebar-list" data-type="archive">
-          ${archives.map((archive) => `
+          ${displayArchives.map((archive) => `
             <li data-value="${archive.key}" data-label="${escapeHtml(archive.label)}">
               <span>${escapeHtml(archive.label)}</span>
               <span class="sidebar-count">${archive.count}</span>
             </li>
           `).join("")}
         </ul>
+        ${hasMore ? `
+          <button class="show-more-btn" data-type="archive" data-expanded="${isExpanded}">
+            ${isExpanded ? "\u6536\u8D77" : `\u67E5\u770B\u66F4\u591A (${this.archivesData.length - DEFAULT_LIMITS.archive})`}
+          </button>
+        ` : ""}
       </div>
     `;
     }
     /**
      * 渲染标签
      */
-    renderTags(tags) {
-      if (tags.length === 0) return "";
+    renderTags() {
+      if (this.tagsData.length === 0) return "";
+      const isExpanded = this.expandState.tag;
+      const limit = isExpanded ? this.tagsData.length : DEFAULT_LIMITS.tag;
+      const displayTags = this.tagsData.slice(0, limit);
+      const hasMore = this.tagsData.length > DEFAULT_LIMITS.tag;
       return `
       <div class="sidebar-block">
         <h3 class="sidebar-title">\u6807\u7B7E</h3>
         <div class="tag-cloud" data-type="tag">
-          ${tags.map(([tag, count]) => `
+          ${displayTags.map(([tag, count]) => `
             <span class="tag-item" data-value="${escapeHtml(tag)}">
               ${escapeHtml(tag)}<span class="tag-count">${count}</span>
             </span>
           `).join("")}
         </div>
+        ${hasMore ? `
+          <button class="show-more-btn" data-type="tag" data-expanded="${isExpanded}">
+            ${isExpanded ? "\u6536\u8D77" : `\u67E5\u770B\u66F4\u591A (${this.tagsData.length - DEFAULT_LIMITS.tag})`}
+          </button>
+        ` : ""}
       </div>
     `;
     }
     /**
      * 渲染分类
      */
-    renderCategories(categories) {
-      if (categories.length === 0) return "";
+    renderCategories() {
+      if (this.categoriesData.length === 0) return "";
+      const isExpanded = this.expandState.category;
+      const limit = isExpanded ? this.categoriesData.length : DEFAULT_LIMITS.category;
+      const displayCategories = this.categoriesData.slice(0, limit);
+      const hasMore = this.categoriesData.length > DEFAULT_LIMITS.category;
       return `
       <div class="sidebar-block">
         <h3 class="sidebar-title">\u5206\u7C7B</h3>
         <ul class="sidebar-list" data-type="category">
-          ${categories.map(([category, count]) => `
+          ${displayCategories.map(([category, count]) => `
             <li data-value="${escapeHtml(category)}" data-label="${escapeHtml(category)}">
               <span>${escapeHtml(category)}</span>
               <span class="sidebar-count">${count}</span>
             </li>
           `).join("")}
         </ul>
+        ${hasMore ? `
+          <button class="show-more-btn" data-type="category" data-expanded="${isExpanded}">
+            ${isExpanded ? "\u6536\u8D77" : `\u67E5\u770B\u66F4\u591A (${this.categoriesData.length - DEFAULT_LIMITS.category})`}
+          </button>
+        ` : ""}
       </div>
     `;
     }
@@ -232,6 +282,16 @@
             this.activeFilters.set("tag", value);
           }
           this.callbacks.onToggleFilter("tag", value, !isCurrentlyActive, value);
+        });
+      });
+      this.container.querySelectorAll(".show-more-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const type = e.currentTarget.getAttribute("data-type");
+          if (type) {
+            this.expandState[type] = !this.expandState[type];
+            this.renderContent();
+          }
         });
       });
     }
