@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页 - My Blog</title>
+    <meta name="description" content="个人博客，分享技术思考与实践">
+    
+    <!-- Code Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" disabled>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/blog.css">
+</head>
+<body>
+    
+    <nav class="nav-bar">
+        <div class="nav-container" style="">
+            <div class="flex items-center gap-8">
+                
+                <a href="/" class="nav-brand">
+                    <span class="brand-icon">B</span>
+                    <span>My Blog</span>
+                </a>
+                
+            </div>
+            <div class="nav-actions">
+                <button id="searchToggle" class="icon-btn" aria-label="搜索 (Cmd+K)">
+                    <i class="ph ph-magnifying-glass" style="font-size: 18px;"></i>
+                </button>
+                <button id="themeToggle" class="icon-btn" aria-label="切换主题">◐</button>
+            </div>
+        </div>
+        <!-- Search Panel -->
+        <div id="searchPanel" class="search-panel">
+            <div class="search-wrapper">
+                <div class="search-input-wrapper">
+                    <span class="search-icon"><i class="ph ph-magnifying-glass" style="font-size: 16px;"></i></span>
+                    <input type="text" id="searchInput" placeholder="搜索文章..." class="search-input">
+                    <kbd class="search-shortcut">ESC</kbd>
+                </div>
+                <div id="searchResults" class="search-results"></div>
+            </div>
+        </div>
+    </nav>
+    <main>
+        
+    <div class="max-w-6xl mx-auto px-6" style="padding-top: var(--space-8);">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-20">
+            
+    <aside class="sidebar-section">
+        <div class="sidebar-block">
+            <h3 class="sidebar-title">归档</h3>
+            <ul class="sidebar-list" data-type="archive">
+                
+                    <li data-value="2026-03" data-label="2026年3月">
+                        <span>2026年3月</span>
+                        <span class="sidebar-count">1</span>
+                    </li>
+                
+                    <li data-value="2026-02" data-label="2026年2月">
+                        <span>2026年2月</span>
+                        <span class="sidebar-count">1</span>
+                    </li>
+                
+                    <li data-value="2026-01" data-label="2026年1月">
+                        <span>2026年1月</span>
+                        <span class="sidebar-count">1</span>
+                    </li>
+                
+                    <li data-value="2025-12" data-label="2025年12月">
+                        <span>2025年12月</span>
+                        <span class="sidebar-count">1</span>
+                    </li>
+                
+            </ul>
+        </div>
+        <div class="sidebar-block">
+            <h3 class="sidebar-title">标签</h3>
+            <div class="tag-cloud" data-type="tag">
+                
+                    <span class="tag-item" data-value="AI">AI<span class="tag-count">1</span></span>
+                
+                    <span class="tag-item" data-value="编程范式">编程范式<span class="tag-count">1</span></span>
+                
+                    <span class="tag-item" data-value="效率工具">效率工具<span class="tag-count">1</span></span>
+                
+                    <span class="tag-item" data-value="Cursor">Cursor<span class="tag-count">1</span></span>
+                
+                    <span class="tag-item" data-value="IDE">IDE<span class="tag-count">1</span></span>
+                
+                    <span class="tag-item" data-value="DevEco Studio">DevEco Studio<span class="tag-count">1</span></span>
+                
+                    <span class="tag-item" data-value="开发者工具">开发者工具<span class="tag-count">1</span></span>
+                
+                    <span class="tag-item" data-value="鸿蒙">鸿蒙<span class="tag-count">1</span></span>
+                
+                    <span class="tag-item" data-value="LLM">LLM<span class="tag-count">1</span></span>
+                
+                    <span class="tag-item" data-value="架构设计">架构设计<span class="tag-count">1</span></span>
+                
+                    <span class="tag-item" data-value="AI应用">AI应用<span class="tag-count">1</span></span>
+                
+                    <span class="tag-item" data-value="生产实践">生产实践<span class="tag-count">1</span></span>
+                
+                    <span class="tag-item" data-value="AI工具">AI工具<span class="tag-count">1</span></span>
+                
+                    <span class="tag-item" data-value="效率">效率<span class="tag-count">1</span></span>
+                
+                    <span class="tag-item" data-value="开发工具">开发工具<span class="tag-count">1</span></span>
+                
+                    <span class="tag-item" data-value="2025">2025<span class="tag-count">1</span></span>
+                
+            </div>
+        </div>
+        <div class="sidebar-block">
+            <h3 class="sidebar-title">分类</h3>
+            <ul class="sidebar-list" data-type="category">
+                
+                    <li data-value="技术思考" data-label="技术思考">
+                        <span>技术思考</span>
+                        <span class="sidebar-count">1</span>
+                    </li>
+                
+                    <li data-value="技术实践" data-label="技术实践">
+                        <span>技术实践</span>
+                        <span class="sidebar-count">1</span>
+                    </li>
+                
+                    <li data-value="架构设计" data-label="架构设计">
+                        <span>架构设计</span>
+                        <span class="sidebar-count">1</span>
+                    </li>
+                
+                    <li data-value="工具推荐" data-label="工具推荐">
+                        <span>工具推荐</span>
+                        <span class="sidebar-count">1</span>
+                    </li>
+                
+            </ul>
+        </div>
+    </aside>
+  
+            <div class="lg:col-span-9">
+                <div class="posts-container">
+                    
+      <article class="post-item">
+          <div class="post-meta">
+              <span class="post-category">技术思考</span>
+              <span class="post-date">2026年3月15日</span>
+              <span class="post-origin" data-origin="original">原创</span>
+          </div>
+          <h2 class="post-title">
+              <a href="/posts/vibe-coding-guide.html">Vibe Coding 完全指南：用 AI 重新定义编程</a>
+          </h2>
+          <p class="post-summary">探索 Vibe Coding 这一新兴编程范式，了解如何利用 AI 工具提升开发效率，以及在这种新模式下程序员角色如何转变。</p>
+          <div class="post-tags"><span class="post-tag">AI</span><span class="post-tag">编程范式</span><span class="post-tag">效率工具</span><span class="post-tag">Cursor</span></div>
+      </article>
+    
+      <article class="post-item">
+          <div class="post-meta">
+              <span class="post-category">技术实践</span>
+              <span class="post-date">2026年2月28日</span>
+              <span class="post-origin" data-origin="original">原创</span>
+          </div>
+          <h2 class="post-title">
+              <a href="/posts/ide-development-insights.html">IDE 开发的那些事儿：打造开发者工具链的心得</a>
+          </h2>
+          <p class="post-summary">在华为 DevEco Studio 团队工作四年的经验分享，聊聊 IDE 开发中的挑战与思考，以及如何构建真正提升开发者效率的工具。</p>
+          <div class="post-tags"><span class="post-tag">IDE</span><span class="post-tag">DevEco Studio</span><span class="post-tag">开发者工具</span><span class="post-tag">鸿蒙</span></div>
+      </article>
+    
+      <article class="post-item">
+          <div class="post-meta">
+              <span class="post-category">架构设计</span>
+              <span class="post-date">2026年1月20日</span>
+              <span class="post-origin" data-origin="original">原创</span>
+          </div>
+          <h2 class="post-title">
+              <a href="/posts/llm-app-architecture.html">LLM 应用架构设计：从原型到生产</a>
+          </h2>
+          <p class="post-summary">探讨构建生产级 LLM 应用的关键架构决策，包括提示工程管理、上下文处理、流式响应、成本控制和评估体系。</p>
+          <div class="post-tags"><span class="post-tag">LLM</span><span class="post-tag">架构设计</span><span class="post-tag">AI应用</span><span class="post-tag">生产实践</span></div>
+      </article>
+    
+      <article class="post-item">
+          <div class="post-meta">
+              <span class="post-category">工具推荐</span>
+              <span class="post-date">2025年12月10日</span>
+              <span class="post-origin" data-origin="repost">转载</span>
+          </div>
+          <h2 class="post-title">
+              <a href="/posts/ai-tools-2025.html">2025 年 AI 工具全景图：开发者必备清单</a>
+          </h2>
+          <p class="post-summary">盘点 2025 年最实用的 AI 开发工具，从代码生成到文档处理，从设计到部署，帮你构建完整的 AI 增强工作流。</p>
+          <div class="post-tags"><span class="post-tag">AI工具</span><span class="post-tag">效率</span><span class="post-tag">开发工具</span><span class="post-tag">2025</span></div>
+      </article>
+    
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    </main>
+    
+    <footer class="footer">
+        <div class="footer-container" style="">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <h4 class="footer-title">关于</h4>
+                    <p class="footer-desc">热爱技术的开发者，分享编程心得与技术思考。记录学习历程，探索代码之美。</p>
+                </div>
+                <div class="footer-links-group">
+                    <h4 class="footer-title">友情链接</h4>
+                    <ul class="footer-friends">
+                        <li><a href="#" target="_blank">Example Blog</a></li>
+                        <li><a href="#" target="_blank">Tech Daily</a></li>
+                        <li><a href="#" target="_blank">Code Share</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4 class="footer-title">联系方式</h4>
+                    <div class="footer-social">
+                        <a href="#" target="_blank" class="footer-link" aria-label="GitHub">
+                            <i class="ph ph-github-logo"></i>
+                        </a>
+                        <a href="mailto:example@email.com" class="footer-link" aria-label="Email">
+                            <i class="ph ph-envelope"></i>
+                        </a>
+                        <a href="#" target="_blank" class="footer-link" aria-label="Twitter">
+                            <i class="ph ph-twitter-logo"></i>
+                        </a>
+                        <a href="#" target="_blank" class="footer-link" aria-label="RSS">
+                            <i class="ph ph-rss"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2026 My Blog. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <button id="backToTop" class="back-to-top" aria-label="回到顶部">↑</button>
+    <script src="/js/app.js"></script>
+</body>
+</html>

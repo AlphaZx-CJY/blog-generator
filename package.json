@@ -1,0 +1,33 @@
+{
+  "name": "blog-generator",
+  "version": "1.0.0",
+  "description": "基于 Node.js 的静态博客生成器",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev-server.js",
+    "build": "npm run build:ts && node scripts/build.js",
+    "build:ts": "esbuild src/ts/index.ts --bundle --outfile=dist/js/app.js --format=iife --target=es2020",
+    "preview": "node scripts/preview-server.js"
+  },
+  "keywords": [
+    "blog",
+    "ssg",
+    "markdown",
+    "static-site-generator"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "highlight.js": "^11.9.0",
+    "marked": "^12.0.0",
+    "marked-gfm-heading-id": "^3.2.0",
+    "marked-highlight": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.2",
+    "chokidar": "^3.6.0",
+    "esbuild": "^0.28.0",
+    "typescript": "^6.0.2"
+  }
+}
