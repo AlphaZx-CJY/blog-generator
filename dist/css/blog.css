@@ -339,6 +339,11 @@ main {
   transform: translateY(-50%);
   color: var(--text-tertiary);
   font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
 }
 
 .search-input {
@@ -659,33 +664,8 @@ main {
 }
 
 .post-item {
-  padding: var(--space-6) var(--space-5);
-  margin: 0 calc(-1 * var(--space-5));
+  padding: var(--space-6) 0;
   border-bottom: 1px solid var(--border);
-  position: relative;
-  transition: all 0.2s ease;
-  border-radius: 4px;
-}
-
-.post-item::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%) scaleY(0);
-  width: 3px;
-  height: 60%;
-  background: var(--text-primary);
-  border-radius: 0 2px 2px 0;
-  transition: transform 0.2s ease;
-}
-
-.post-item:hover {
-  background: var(--bg-secondary);
-}
-
-.post-item:hover::before {
-  transform: translateY(-50%) scaleY(1);
 }
 
 .post-item:last-child {
@@ -693,7 +673,7 @@ main {
 }
 
 .post-item:first-child {
-  padding-top: var(--space-6);
+  padding-top: 0;
 }
 
 .post-meta {
@@ -814,12 +794,12 @@ main {
    Table of Contents
    ---------------------------------------- */
 .toc-container {
-  position: sticky;
+  position: fixed;
+  right: calc((100vw - 720px) / 2 - 220px);
   top: 100px;
   width: 200px;
   display: none;
-  align-self: flex-start;
-  max-height: calc(100vh - 150px);
+  max-height: calc(100vh - 250px);
   overflow-y: auto;
 }
 
@@ -827,16 +807,6 @@ main {
   .toc-container {
     display: block;
   }
-}
-
-/* 文章页布局支持 sticky TOC */
-.post-header,
-.post-content,
-.post-footer,
-.post-nav,
-.comments-section {
-  position: relative;
-  z-index: 1;
 }
 
 .toc-title {

@@ -314,28 +314,7 @@ function getFooter(isPost = false) {
  * 生成文章列表页面
  */
 async function generateIndexPage(posts, tags, categories, archives) {
-  const postsHTML = posts.map(post => {
-    const date = formatDate(post.meta.date);
-    const originText = post.meta.origin === 'original' ? '原创' : '转载';
-    const summary = post.meta.summary || generateExcerpt(post.body);
-    const tagsHTML = post.meta.tags.map(tag => `<span class="post-tag">${tag}</span>`).join('');
-    
-    return `
-      <article class="post-item">
-          <div class="post-meta">
-              <span class="post-category">${post.meta.category || '未分类'}</span>
-              <span class="post-date">${date.full}</span>
-              <span class="post-origin" data-origin="${post.meta.origin}">${originText}</span>
-          </div>
-          <h2 class="post-title">
-              <a href="/posts/${post.id}.html">${post.meta.title}</a>
-          </h2>
-          <p class="post-summary">${summary}</p>
-          ${tagsHTML ? `<div class="post-tags">${tagsHTML}</div>` : ''}
-      </article>
-    `;
-  }).join('');
-
+  // Posts will be loaded dynamically by client-side JS for filtering to work
   const sidebarHTML = `
     <aside class="sidebar-section">
       <!-- Sidebar content will be rendered by client-side JS -->
@@ -347,8 +326,29 @@ async function generateIndexPage(posts, tags, categories, archives) {
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-20">
             ${sidebarHTML}
             <div class="lg:col-span-9">
-                <div class="posts-container">
-                    ${postsHTML}
+                <!-- Filter Status -->
+                <div id="filterStatus" class="filter-status hidden">
+                    <span id="filterLabel">筛选结果</span>
+                    <button id="clearFilter" class="clear-filter-btn">清除</button>
+                </div>
+                
+                <div id="postsContainer" class="posts-container">
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <p>正在加载文章...</p>
+                    </div>
+                </div>
+                
+                <!-- Load More -->
+                <div id="loadMoreContainer" class="load-more-container hidden">
+                    <button id="loadMoreBtn" class="load-more-btn">加载更多</button>
+                </div>
+                
+                <!-- Empty State -->
+                <div id="emptyState" class="empty-state hidden">
+                    <div class="empty-icon">📄</div>
+                    <h3>暂无文章</h3>
+                    <p>该分类下暂时没有文章</p>
                 </div>
             </div>
         </div>

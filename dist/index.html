@@ -57,60 +57,29 @@
     </aside>
   
             <div class="lg:col-span-9">
-                <div class="posts-container">
-                    
-      <article class="post-item">
-          <div class="post-meta">
-              <span class="post-category">技术思考</span>
-              <span class="post-date">2026年3月15日</span>
-              <span class="post-origin" data-origin="original">原创</span>
-          </div>
-          <h2 class="post-title">
-              <a href="/posts/vibe-coding-guide.html">Vibe Coding 完全指南：用 AI 重新定义编程</a>
-          </h2>
-          <p class="post-summary">探索 Vibe Coding 这一新兴编程范式，了解如何利用 AI 工具提升开发效率，以及在这种新模式下程序员角色如何转变。</p>
-          <div class="post-tags"><span class="post-tag">AI</span><span class="post-tag">编程范式</span><span class="post-tag">效率工具</span><span class="post-tag">Cursor</span></div>
-      </article>
-    
-      <article class="post-item">
-          <div class="post-meta">
-              <span class="post-category">技术实践</span>
-              <span class="post-date">2026年2月28日</span>
-              <span class="post-origin" data-origin="original">原创</span>
-          </div>
-          <h2 class="post-title">
-              <a href="/posts/ide-development-insights.html">IDE 开发的那些事儿：打造开发者工具链的心得</a>
-          </h2>
-          <p class="post-summary">在华为 DevEco Studio 团队工作四年的经验分享，聊聊 IDE 开发中的挑战与思考，以及如何构建真正提升开发者效率的工具。</p>
-          <div class="post-tags"><span class="post-tag">IDE</span><span class="post-tag">DevEco Studio</span><span class="post-tag">开发者工具</span><span class="post-tag">鸿蒙</span></div>
-      </article>
-    
-      <article class="post-item">
-          <div class="post-meta">
-              <span class="post-category">架构设计</span>
-              <span class="post-date">2026年1月20日</span>
-              <span class="post-origin" data-origin="original">原创</span>
-          </div>
-          <h2 class="post-title">
-              <a href="/posts/llm-app-architecture.html">LLM 应用架构设计：从原型到生产</a>
-          </h2>
-          <p class="post-summary">探讨构建生产级 LLM 应用的关键架构决策，包括提示工程管理、上下文处理、流式响应、成本控制和评估体系。</p>
-          <div class="post-tags"><span class="post-tag">LLM</span><span class="post-tag">架构设计</span><span class="post-tag">AI应用</span><span class="post-tag">生产实践</span></div>
-      </article>
-    
-      <article class="post-item">
-          <div class="post-meta">
-              <span class="post-category">工具推荐</span>
-              <span class="post-date">2025年12月10日</span>
-              <span class="post-origin" data-origin="repost">转载</span>
-          </div>
-          <h2 class="post-title">
-              <a href="/posts/ai-tools-2025.html">2025 年 AI 工具全景图：开发者必备清单</a>
-          </h2>
-          <p class="post-summary">盘点 2025 年最实用的 AI 开发工具，从代码生成到文档处理，从设计到部署，帮你构建完整的 AI 增强工作流。</p>
-          <div class="post-tags"><span class="post-tag">AI工具</span><span class="post-tag">效率</span><span class="post-tag">开发工具</span><span class="post-tag">2025</span></div>
-      </article>
-    
+                <!-- Filter Status -->
+                <div id="filterStatus" class="filter-status hidden">
+                    <span id="filterLabel">筛选结果</span>
+                    <button id="clearFilter" class="clear-filter-btn">清除</button>
+                </div>
+                
+                <div id="postsContainer" class="posts-container">
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <p>正在加载文章...</p>
+                    </div>
+                </div>
+                
+                <!-- Load More -->
+                <div id="loadMoreContainer" class="load-more-container hidden">
+                    <button id="loadMoreBtn" class="load-more-btn">加载更多</button>
+                </div>
+                
+                <!-- Empty State -->
+                <div id="emptyState" class="empty-state hidden">
+                    <div class="empty-icon">📄</div>
+                    <h3>暂无文章</h3>
+                    <p>该分类下暂时没有文章</p>
                 </div>
             </div>
         </div>
