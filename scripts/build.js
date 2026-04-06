@@ -506,58 +506,55 @@ async function generatePostPage(post, prev, next, config) {
   const originText = post.meta.origin === 'original' ? '原创' : '转载';
   
   const content = `
-    <div class="post-layout">
-        <article class="post-main">
-            <header class="post-header">
-                <div class="post-header-content">
-                    <div class="post-header-meta">
-                        <span class="post-category">${post.meta.category || '未分类'}</span>
-                        <span class="post-date">${date.full}</span>
-                        <span class="post-origin" data-origin="${post.meta.origin}">${originText}</span>
-                    </div>
-                    <h1 class="post-header-title">${post.meta.title}</h1>
-                    ${post.meta.summary ? `<p class="post-header-summary">${post.meta.summary}</p>` : ''}
+    <article class="max-w-3xl mx-auto px-6 pb-20">
+        <header class="post-header">
+            <div class="post-header-content">
+                <div class="post-header-meta">
+                    <span class="post-category">${post.meta.category || '未分类'}</span>
+                    <span class="post-date">${date.full}</span>
+                    <span class="post-origin" data-origin="${post.meta.origin}">${originText}</span>
                 </div>
-            </header>
-
-            <div class="post-content" id="postContent">
-                ${post.html}
+                <h1 class="post-header-title">${post.meta.title}</h1>
+                ${post.meta.summary ? `<p class="post-header-summary">${post.meta.summary}</p>` : ''}
             </div>
+        </header>
 
-            <footer class="post-footer">
-                ${post.meta.tags.length ? `
-                    <div class="post-footer-tags">
-                        <span class="post-footer-label">标签:</span>
-                        ${post.meta.tags.map(tag => `<a href="/" class="post-footer-tag">${tag}</a>`).join('')}
-                    </div>
-                ` : ''}
-            </footer>
+        <!-- TOC Container - Desktop Only -->
+        <div id="tocContainer" class="toc-container">
+            <h4 class="toc-title">目录</h4>
+            <nav id="tocNav" class="toc-nav"></nav>
+        </div>
 
-            <nav class="post-nav">
-                ${prev ? `
-                    <a href="/posts/${prev.id}.html" class="post-nav-item">
-                        <div class="post-nav-label">← 上一篇</div>
-                        <div class="post-nav-title">${prev.meta.title}</div>
-                    </a>
-                ` : '<div></div>'}
-                ${next ? `
-                    <a href="/posts/${next.id}.html" class="post-nav-item next">
-                        <div class="post-nav-label">下一篇 →</div>
-                        <div class="post-nav-title">${next.meta.title}</div>
-                    </a>
-                ` : '<div></div>'}
-            </nav>
+        <div class="post-content" id="postContent">
+            ${post.html}
+        </div>
 
-            ${generateCommentsHTML(config.comments)}
-        </article>
+        <footer class="post-footer">
+            ${post.meta.tags.length ? `
+                <div class="post-footer-tags">
+                    <span class="post-footer-label">标签:</span>
+                    ${post.meta.tags.map(tag => `<a href="/" class="post-footer-tag">${tag}</a>`).join('')}
+                </div>
+            ` : ''}
+        </footer>
 
-        <aside class="post-sidebar">
-            <div id="tocContainer" class="toc-container">
-                <h4 class="toc-title">目录</h4>
-                <nav id="tocNav" class="toc-nav"></nav>
-            </div>
-        </aside>
-    </div>
+        <nav class="post-nav">
+            ${prev ? `
+                <a href="/posts/${prev.id}.html" class="post-nav-item">
+                    <div class="post-nav-label">← 上一篇</div>
+                    <div class="post-nav-title">${prev.meta.title}</div>
+                </a>
+            ` : '<div></div>'}
+            ${next ? `
+                <a href="/posts/${next.id}.html" class="post-nav-item next">
+                    <div class="post-nav-label">下一篇 →</div>
+                    <div class="post-nav-title">${next.meta.title}</div>
+                </a>
+            ` : '<div></div>'}
+        </nav>
+
+        ${generateCommentsHTML(config.comments)}
+    </article>
   `;
 
   let html = getBaseTemplate(config.title)
