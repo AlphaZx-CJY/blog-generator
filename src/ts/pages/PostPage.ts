@@ -52,6 +52,14 @@ export class PostPage {
       this.post = await fetchPostById(this.postId!);
 
       if (!this.post) {
+        // 如果无法从 API 获取，但页面已有预渲染内容，则保留预渲染内容
+        const content = document.getElementById('postContent');
+        if (content && content.innerHTML.trim()) {
+          console.log('使用预渲染内容');
+          this.setupTOC();
+          this.highlightCode();
+          return;
+        }
         this.showError('文章不存在');
         return;
       }
@@ -66,6 +74,14 @@ export class PostPage {
       }, 100);
     } catch (error) {
       console.error('加载文章失败:', error);
+      // 如果 API 加载失败但页面已有预渲染内容，保留预渲染内容
+      const content = document.getElementById('postContent');
+      if (content && content.innerHTML.trim()) {
+        console.log('API 加载失败，使用预渲染内容');
+        this.setupTOC();
+        this.highlightCode();
+        return;
+      }
       this.showError('加载文章失败');
     }
   }
@@ -98,9 +114,13 @@ export class PostPage {
       `;
     }
 
-    // 渲染内容
-    if (content) {
-      content.innerHTML = this.post.html || '';
+    // 渲染内容（仅在内容为空或需要更新时渲染）
+    if (content && this.post.html) {
+      // 检查是否有预渲染内容，如果有且内容相似则保留
+      const existingContent = content.innerHTML.trim();
+      if (!existingContent) {
+        content.innerHTML = this.post.html;
+      }
     }
 
     // 渲染页脚标签
