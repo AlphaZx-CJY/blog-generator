@@ -7,6 +7,7 @@ import { TOC } from '../components/TOC';
 import { Search } from '../components/Search';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { BackToTop } from '../components/BackToTop';
+import { ReadingProgress } from '../components/ReadingProgress';
 import { formatDate } from '../utils/date';
 import { escapeHtml, generateExcerpt } from '../utils/html';
 import type { Post } from '../types';
@@ -37,6 +38,7 @@ export class PostPage {
     new Search();
     new ThemeToggle();
     new BackToTop();
+    new ReadingProgress();
 
     // 加载文章
     await this.loadPost();

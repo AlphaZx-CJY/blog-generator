@@ -255,9 +255,15 @@ function getBaseTemplate(blogTitle = 'My Blog') {
  */
 function getNav(currentPage = 'home', blogTitle = 'My Blog') {
   const navContainerStyle = currentPage === 'post' ? 'max-width: 720px;' : '';
+  const readingProgress = currentPage === 'post' ? `
+        <div class="reading-progress-container">
+            <div class="reading-progress-bar" id="readingProgress"></div>
+        </div>
+  ` : '';
   
   return `
     <nav class="nav-bar">
+        ${readingProgress}
         <div class="nav-container" style="${navContainerStyle}">
             <div class="flex items-center gap-8">
                 ${currentPage === 'post' ? `

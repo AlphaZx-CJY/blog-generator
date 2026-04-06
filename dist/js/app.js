@@ -862,6 +862,55 @@
     }
   };
 
+  // src/ts/components/ReadingProgress.ts
+  var ReadingProgress = class {
+    constructor() {
+      this.progressBar = document.getElementById("readingProgress");
+      this.init();
+    }
+    /**
+     * 初始化
+     */
+    init() {
+      if (!this.progressBar) return;
+      let ticking = false;
+      window.addEventListener("scroll", () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            this.updateProgress();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+      this.updateProgress();
+    }
+    /**
+     * 更新进度
+     */
+    updateProgress() {
+      if (!this.progressBar) return;
+      const article = document.querySelector("article");
+      if (!article) return;
+      const rect = article.getBoundingClientRect();
+      const articleTop = rect.top + window.scrollY;
+      const articleHeight = rect.height;
+      const scrollTop = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const startOffset = articleTop;
+      const endOffset = articleTop + articleHeight - windowHeight;
+      const scrollableDistance = endOffset - startOffset;
+      let progress = 0;
+      if (scrollableDistance > 0) {
+        const currentScroll = scrollTop - startOffset;
+        progress = Math.max(0, Math.min(100, currentScroll / scrollableDistance * 100));
+      } else if (scrollTop >= endOffset) {
+        progress = 100;
+      }
+      this.progressBar.style.width = `${progress}%`;
+    }
+  };
+
   // src/ts/pages/PostPage.ts
   var PostPage = class {
     constructor() {
@@ -883,6 +932,7 @@
       new Search();
       new ThemeToggle();
       new BackToTop();
+      new ReadingProgress();
       await this.loadPost();
     }
     /**

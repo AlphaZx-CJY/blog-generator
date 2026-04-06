@@ -210,6 +210,23 @@ main {
   background: rgba(12, 10, 9, 0.95);
 }
 
+.reading-progress-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: transparent;
+  overflow: hidden;
+}
+
+.reading-progress-bar {
+  height: 100%;
+  background: var(--text-primary);
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
 .nav-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -799,7 +816,7 @@ main {
   top: 100px;
   width: 200px;
   display: none;
-  max-height: calc(100vh - 350px);
+  max-height: calc(100vh - 200px);
   overflow-y: auto;
 }
 
