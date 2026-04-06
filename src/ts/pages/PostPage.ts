@@ -109,7 +109,7 @@ export class PostPage {
         <div class="post-footer-tags">
           <span class="post-footer-label">标签:</span>
           ${this.post.meta.tags.map(tag => `
-            <a href="/index.html" class="post-footer-tag">${escapeHtml(tag)}</a>
+            <a href="./" class="post-footer-tag">${escapeHtml(tag)}</a>
           `).join('')}
         </div>
       `;
