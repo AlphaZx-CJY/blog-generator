@@ -54,29 +54,22 @@
     </nav>
     <main>
         
-    <article class="max-w-3xl mx-auto px-6 pb-20">
-        <header class="post-header">
-            <div class="post-header-content">
-                <div class="post-header-meta">
-                    <span class="post-category">架构设计</span>
-                    <span class="post-date">2026年1月20日</span>
-                    <span class="post-origin" data-origin="original">原创</span>
+    <div class="post-layout">
+        <article class="post-main">
+            <header class="post-header">
+                <div class="post-header-content">
+                    <div class="post-header-meta">
+                        <span class="post-category">架构设计</span>
+                        <span class="post-date">2026年1月20日</span>
+                        <span class="post-origin" data-origin="original">原创</span>
+                    </div>
+                    <h1 class="post-header-title">LLM 应用架构设计：从原型到生产</h1>
+                    <p class="post-header-summary">探讨构建生产级 LLM 应用的关键架构决策，包括提示工程管理、上下文处理、流式响应、成本控制和评估体系。</p>
                 </div>
-                <h1 class="post-header-title">LLM 应用架构设计：从原型到生产</h1>
-                <p class="post-header-summary">探讨构建生产级 LLM 应用的关键架构决策，包括提示工程管理、上下文处理、流式响应、成本控制和评估体系。</p>
-            </div>
-        </header>
+            </header>
 
-        <!-- TOC Container - Desktop Only -->
-        <div id="tocContainer" class="toc-container">
-            <div class="toc-sticky">
-                <h4 class="toc-title">目录</h4>
-                <nav id="tocNav" class="toc-nav"></nav>
-            </div>
-        </div>
-
-        <div class="post-content" id="postContent">
-            <h1>LLM 应用架构设计：从原型到生产</h1>
+            <div class="post-content" id="postContent">
+                <h1>LLM 应用架构设计：从原型到生产</h1>
 <p>把 LLM 原型变成生产级应用，中间隔着一道鸿沟。本文分享我在构建 LLM 应用时的一些架构思考。</p>
 <h2>核心挑战</h2>
 <h3>1. 不确定性</h3>
@@ -328,33 +321,33 @@ Claude 3: 200K tokens
 </ol>
 <p>最重要的是，不要为了追求技术新潮而使用 LLM，而是用它来真正解决用户的痛点。</p>
 
-        </div>
+            </div>
 
-        <footer class="post-footer">
-            
-                <div class="post-footer-tags">
-                    <span class="post-footer-label">标签:</span>
-                    <a href="/" class="post-footer-tag">LLM</a><a href="/" class="post-footer-tag">架构设计</a><a href="/" class="post-footer-tag">AI应用</a><a href="/" class="post-footer-tag">生产实践</a>
-                </div>
-            
-        </footer>
+            <footer class="post-footer">
+                
+                    <div class="post-footer-tags">
+                        <span class="post-footer-label">标签:</span>
+                        <a href="/" class="post-footer-tag">LLM</a><a href="/" class="post-footer-tag">架构设计</a><a href="/" class="post-footer-tag">AI应用</a><a href="/" class="post-footer-tag">生产实践</a>
+                    </div>
+                
+            </footer>
 
-        <nav class="post-nav">
-            
-                <a href="/posts/ai-tools-2025.html" class="post-nav-item">
-                    <div class="post-nav-label">← 上一篇</div>
-                    <div class="post-nav-title">2025 年 AI 工具全景图：开发者必备清单</div>
-                </a>
-            
-            
-                <a href="/posts/ide-development-insights.html" class="post-nav-item next">
-                    <div class="post-nav-label">下一篇 →</div>
-                    <div class="post-nav-title">IDE 开发的那些事儿：打造开发者工具链的心得</div>
-                </a>
-            
-        </nav>
+            <nav class="post-nav">
+                
+                    <a href="/posts/ai-tools-2025.html" class="post-nav-item">
+                        <div class="post-nav-label">← 上一篇</div>
+                        <div class="post-nav-title">2025 年 AI 工具全景图：开发者必备清单</div>
+                    </a>
+                
+                
+                    <a href="/posts/ide-development-insights.html" class="post-nav-item next">
+                        <div class="post-nav-label">下一篇 →</div>
+                        <div class="post-nav-title">IDE 开发的那些事儿：打造开发者工具链的心得</div>
+                    </a>
+                
+            </nav>
 
-        
+            
         <section class="comments-section">
             <h3 class="comments-title">评论</h3>
             <div class="giscus"></div>
@@ -375,7 +368,15 @@ Claude 3: 200K tokens
             </script>
         </section>
     
-    </article>
+        </article>
+
+        <aside class="post-sidebar">
+            <div id="tocContainer" class="toc-container">
+                <h4 class="toc-title">目录</h4>
+                <nav id="tocNav" class="toc-nav"></nav>
+            </div>
+        </aside>
+    </div>
   
     </main>
     

@@ -772,7 +772,7 @@ main {
    Post Page
    ---------------------------------------- */
 .post-header {
-  padding: var(--space-12) 0 var(--space-8);
+  padding: 0 0 var(--space-8);
   margin-bottom: var(--space-10);
   border-bottom: 2px solid var(--border);
 }
@@ -810,20 +810,36 @@ main {
 /* ----------------------------------------
    Table of Contents
    ---------------------------------------- */
-.toc-container {
-  position: fixed;
-  right: calc((100vw - 720px) / 2 - 220px);
-  top: 100px;
-  width: 200px;
+/* Post Layout - Grid */
+.post-layout {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 60px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-6) var(--space-20);
+}
+
+.post-main {
+  min-width: 0;
+}
+
+.post-sidebar {
   display: none;
-  max-height: calc(100vh - 200px);
-  overflow-y: auto;
 }
 
 @media (min-width: 1280px) {
-  .toc-container {
+  .post-sidebar {
     display: block;
   }
+}
+
+.toc-container {
+  position: sticky;
+  top: 100px;
+  width: 200px;
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
 }
 
 .toc-title {

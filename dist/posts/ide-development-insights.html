@@ -54,29 +54,22 @@
     </nav>
     <main>
         
-    <article class="max-w-3xl mx-auto px-6 pb-20">
-        <header class="post-header">
-            <div class="post-header-content">
-                <div class="post-header-meta">
-                    <span class="post-category">技术实践</span>
-                    <span class="post-date">2026年2月28日</span>
-                    <span class="post-origin" data-origin="original">原创</span>
+    <div class="post-layout">
+        <article class="post-main">
+            <header class="post-header">
+                <div class="post-header-content">
+                    <div class="post-header-meta">
+                        <span class="post-category">技术实践</span>
+                        <span class="post-date">2026年2月28日</span>
+                        <span class="post-origin" data-origin="original">原创</span>
+                    </div>
+                    <h1 class="post-header-title">IDE 开发的那些事儿：打造开发者工具链的心得</h1>
+                    <p class="post-header-summary">在华为 DevEco Studio 团队工作四年的经验分享，聊聊 IDE 开发中的挑战与思考，以及如何构建真正提升开发者效率的工具。</p>
                 </div>
-                <h1 class="post-header-title">IDE 开发的那些事儿：打造开发者工具链的心得</h1>
-                <p class="post-header-summary">在华为 DevEco Studio 团队工作四年的经验分享，聊聊 IDE 开发中的挑战与思考，以及如何构建真正提升开发者效率的工具。</p>
-            </div>
-        </header>
+            </header>
 
-        <!-- TOC Container - Desktop Only -->
-        <div id="tocContainer" class="toc-container">
-            <div class="toc-sticky">
-                <h4 class="toc-title">目录</h4>
-                <nav id="tocNav" class="toc-nav"></nav>
-            </div>
-        </div>
-
-        <div class="post-content" id="postContent">
-            <h1>IDE 开发的那些事儿：打造开发者工具链的心得</h1>
+            <div class="post-content" id="postContent">
+                <h1>IDE 开发的那些事儿：打造开发者工具链的心得</h1>
 <p>在华为 DevEco Studio 团队工作的四年里，我有幸参与了多个亮点特性的开发。从低代码平台到 UI 生成，从智慧化调优到 UI 意图识别，每一个项目都让我对&quot;开发者工具&quot;有了更深的理解。</p>
 <h2>IDE 开发的特殊性</h2>
 <h3>与业务开发的不同</h3>
@@ -225,33 +218,33 @@ struct <span class="hljs-title class_">GeneratedComponent</span> {
 <p>做开发者工具是一件很有成就感的事 —— 你提升的是无数开发者的效率。但这也是极具挑战的工作，因为你的用户是最懂技术的一群人。</p>
 <p>记住：<strong>好的工具是隐形的</strong>。当开发者专注于自己的创作，而忘记工具的存在时，你就成功了。</p>
 
-        </div>
+            </div>
 
-        <footer class="post-footer">
-            
-                <div class="post-footer-tags">
-                    <span class="post-footer-label">标签:</span>
-                    <a href="/" class="post-footer-tag">IDE</a><a href="/" class="post-footer-tag">DevEco Studio</a><a href="/" class="post-footer-tag">开发者工具</a><a href="/" class="post-footer-tag">鸿蒙</a>
-                </div>
-            
-        </footer>
+            <footer class="post-footer">
+                
+                    <div class="post-footer-tags">
+                        <span class="post-footer-label">标签:</span>
+                        <a href="/" class="post-footer-tag">IDE</a><a href="/" class="post-footer-tag">DevEco Studio</a><a href="/" class="post-footer-tag">开发者工具</a><a href="/" class="post-footer-tag">鸿蒙</a>
+                    </div>
+                
+            </footer>
 
-        <nav class="post-nav">
-            
-                <a href="/posts/llm-app-architecture.html" class="post-nav-item">
-                    <div class="post-nav-label">← 上一篇</div>
-                    <div class="post-nav-title">LLM 应用架构设计：从原型到生产</div>
-                </a>
-            
-            
-                <a href="/posts/vibe-coding-guide.html" class="post-nav-item next">
-                    <div class="post-nav-label">下一篇 →</div>
-                    <div class="post-nav-title">Vibe Coding 完全指南：用 AI 重新定义编程</div>
-                </a>
-            
-        </nav>
+            <nav class="post-nav">
+                
+                    <a href="/posts/llm-app-architecture.html" class="post-nav-item">
+                        <div class="post-nav-label">← 上一篇</div>
+                        <div class="post-nav-title">LLM 应用架构设计：从原型到生产</div>
+                    </a>
+                
+                
+                    <a href="/posts/vibe-coding-guide.html" class="post-nav-item next">
+                        <div class="post-nav-label">下一篇 →</div>
+                        <div class="post-nav-title">Vibe Coding 完全指南：用 AI 重新定义编程</div>
+                    </a>
+                
+            </nav>
 
-        
+            
         <section class="comments-section">
             <h3 class="comments-title">评论</h3>
             <div class="giscus"></div>
@@ -272,7 +265,15 @@ struct <span class="hljs-title class_">GeneratedComponent</span> {
             </script>
         </section>
     
-    </article>
+        </article>
+
+        <aside class="post-sidebar">
+            <div id="tocContainer" class="toc-container">
+                <h4 class="toc-title">目录</h4>
+                <nav id="tocNav" class="toc-nav"></nav>
+            </div>
+        </aside>
+    </div>
   
     </main>
     
