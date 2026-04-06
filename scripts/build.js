@@ -219,7 +219,7 @@ function generateExcerpt(body, maxLength = 150) {
 /**
  * HTML 模板 - Developer Editorial Style
  */
-function getBaseTemplate(blogTitle = 'My Blog') {
+function getBaseTemplate(blogTitle = 'My Blog', basePath = './') {
   return `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -236,7 +236,7 @@ function getBaseTemplate(blogTitle = 'My Blog') {
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
     <!-- Styles -->
-    <link rel="stylesheet" href="/css/blog.css">
+    <link rel="stylesheet" href="${basePath}css/blog.css">
 </head>
 <body>
     {{nav}}
@@ -245,7 +245,7 @@ function getBaseTemplate(blogTitle = 'My Blog') {
     </main>
     {{footer}}
     <button id="backToTop" class="back-to-top" aria-label="回到顶部">↑</button>
-    <script src="/js/app.js"></script>
+    <script src="${basePath}js/app.js"></script>
 </body>
 </html>`;
 }
@@ -267,12 +267,12 @@ function getNav(currentPage = 'home', blogTitle = 'My Blog') {
         <div class="nav-container" style="${navContainerStyle}">
             <div class="flex items-center gap-8">
                 ${currentPage === 'post' ? `
-                <a href="/" class="nav-link" style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text-secondary);">
+                <a href="../" class="nav-link" style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text-secondary);">
                     <span>←</span>
                     <span>返回</span>
                 </a>
                 ` : `
-                <a href="/" class="nav-brand">
+                <a href="./" class="nav-brand">
                     <span class="brand-icon">B</span>
                     <span>${blogTitle}</span>
                 </a>
@@ -487,7 +487,7 @@ async function generateIndexPage(posts, tags, categories, archives, config) {
     </div>
   `;
 
-  let html = getBaseTemplate(config.title)
+  let html = getBaseTemplate(config.title, './')
     .replace('{{title}}', '首页')
     .replace('{{description}}', '个人博客，分享技术思考与实践')
     .replace('{{nav}}', getNav('home', config.title))
@@ -533,20 +533,20 @@ async function generatePostPage(post, prev, next, config) {
             ${post.meta.tags.length ? `
                 <div class="post-footer-tags">
                     <span class="post-footer-label">标签:</span>
-                    ${post.meta.tags.map(tag => `<a href="/" class="post-footer-tag">${tag}</a>`).join('')}
+                    ${post.meta.tags.map(tag => `<a href="../" class="post-footer-tag">${tag}</a>`).join('')}
                 </div>
             ` : ''}
         </footer>
 
         <nav class="post-nav">
             ${prev ? `
-                <a href="/posts/${prev.id}.html" class="post-nav-item">
+                <a href="./${prev.id}.html" class="post-nav-item">
                     <div class="post-nav-label">← 上一篇</div>
                     <div class="post-nav-title">${prev.meta.title}</div>
                 </a>
             ` : '<div></div>'}
             ${next ? `
-                <a href="/posts/${next.id}.html" class="post-nav-item next">
+                <a href="./${next.id}.html" class="post-nav-item next">
                     <div class="post-nav-label">下一篇 →</div>
                     <div class="post-nav-title">${next.meta.title}</div>
                 </a>
@@ -557,7 +557,7 @@ async function generatePostPage(post, prev, next, config) {
     </article>
   `;
 
-  let html = getBaseTemplate(config.title)
+  let html = getBaseTemplate(config.title, '../')
     .replace('{{title}}', post.meta.title)
     .replace('{{description}}', post.meta.summary || generateExcerpt(post.body))
     .replace('{{nav}}', getNav('post', config.title))

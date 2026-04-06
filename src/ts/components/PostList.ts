@@ -57,7 +57,7 @@ export class PostList {
           <span class="post-origin">${originText}</span>
         </div>
         <h2 class="post-title">
-          <a href="/posts/${post.id}.html">${escapeHtml(post.meta.title)}</a>
+          <a href="./posts/${post.id}.html">${escapeHtml(post.meta.title)}</a>
         </h2>
         <p class="post-summary">${escapeHtml(summary)}</p>
         ${tags.length > 0 ? `

@@ -9,9 +9,10 @@ import { PostPage } from './pages/PostPage';
 document.addEventListener('DOMContentLoaded', () => {
   const path = window.location.pathname;
 
-  if (path === '/' || path === '/index.html') {
+  // 根据路径判断页面类型（支持子目录部署）
+  if (path.endsWith('/') || path.endsWith('/index.html')) {
     new BlogPage();
-  } else if (path.startsWith('/posts/')) {
+  } else if (path.includes('/posts/')) {
     new PostPage();
   }
 });

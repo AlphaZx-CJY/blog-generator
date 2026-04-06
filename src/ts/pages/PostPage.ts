@@ -133,13 +133,13 @@ export class PostPage {
 
       nav.innerHTML = `
         ${prev ? `
-          <a href="/posts/${prev.id}.html" class="post-nav-item">
+          <a href="./${prev.id}.html" class="post-nav-item">
             <div class="post-nav-label">← 上一篇</div>
             <div class="post-nav-title">${escapeHtml(prev.meta.title)}</div>
           </a>
         ` : '<div></div>'}
         ${next ? `
-          <a href="/posts/${next.id}.html" class="post-nav-item next">
+          <a href="./${next.id}.html" class="post-nav-item next">
             <div class="post-nav-label">下一篇 →</div>
             <div class="post-nav-title">${escapeHtml(next.meta.title)}</div>
           </a>

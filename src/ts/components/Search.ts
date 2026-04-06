@@ -135,7 +135,7 @@ export class Search {
       `;
     } else {
       this.results.innerHTML = posts.map(post => `
-        <a href="/posts/${post.id}.html" class="search-result-item">
+        <a href="./posts/${post.id}.html" class="search-result-item">
           <div class="search-result-title">${escapeHtml(post.meta.title)}</div>
           <div class="search-result-excerpt">${escapeHtml(generateExcerpt(post.excerpt || post.meta.summary, 100))}</div>
         </a>
