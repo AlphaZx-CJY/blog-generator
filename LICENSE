@@ -19,14 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-特别致谢 / Special Thanks:
-
-本项目在开发过程中使用了 Kimi (Moonshot AI) 的辅助。
-代码生成、架构设计和问题排查等环节得到了 Kimi 的大力支持。
-
-This project was developed with assistance from Kimi (Moonshot AI).
-Special thanks for the support in code generation, architecture design,
-and troubleshooting.

@@ -193,6 +193,12 @@ npm run build
 }
 ```
 
+## 致谢
+
+本项目在开发过程中使用了 [Kimi](https://kimi.moonshot.cn/) (Moonshot AI) 的辅助。
+
+代码生成、架构设计和问题排查等环节得到了 Kimi 的大力支持。
+
 ## License
 
 MIT
