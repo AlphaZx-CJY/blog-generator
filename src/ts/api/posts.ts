@@ -8,13 +8,26 @@ import { getArchiveKey, getArchiveLabel } from '../utils/date';
 let postsCache: Post[] | null = null;
 
 /**
+ * 获取 posts.json 的路径（根据当前页面位置）
+ */
+function getPostsJsonPath(): string {
+  const path = window.location.pathname;
+  // 如果在文章页（/posts/xxx.html），需要返回上级目录
+  if (path.includes('/posts/')) {
+    return '../posts.json';
+  }
+  // 首页或其他页面，使用当前目录
+  return './posts.json';
+}
+
+/**
  * 获取所有文章
  */
 export async function fetchPosts(): Promise<Post[]> {
   if (postsCache) return postsCache;
   
   try {
-    const response = await fetch('./posts.json');
+    const response = await fetch(getPostsJsonPath());
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
