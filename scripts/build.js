@@ -11,12 +11,38 @@ import matter from 'gray-matter';
 import { marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import hljs from 'highlight.js';
+import yaml from 'js-yaml';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.join(__dirname, '..');
 const POSTS_DIR = path.join(ROOT_DIR, 'content', 'posts');
 const DIST_DIR = path.join(ROOT_DIR, 'dist');
 const SRC_DIR = path.join(ROOT_DIR, 'src');
+const CONFIG_FILE = path.join(ROOT_DIR, 'content', 'blog.config.yml');
+
+/**
+ * 加载博客配置
+ */
+async function loadConfig() {
+  const defaultConfig = {
+    title: 'My Blog',
+    about: null,
+    friends: []
+  };
+  
+  try {
+    const content = await fs.readFile(CONFIG_FILE, 'utf-8');
+    const config = yaml.load(content) || {};
+    return {
+      title: config.title || defaultConfig.title,
+      about: config.about || defaultConfig.about,
+      friends: config.friends || defaultConfig.friends
+    };
+  } catch {
+    // 配置文件不存在或解析失败，使用默认配置
+    return defaultConfig;
+  }
+}
 
 // 配置 marked
 marked.use(markedHighlight({
@@ -189,13 +215,13 @@ function generateExcerpt(body, maxLength = 150) {
 /**
  * HTML 模板 - Developer Editorial Style
  */
-function getBaseTemplate() {
+function getBaseTemplate(blogTitle = 'My Blog') {
   return `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}} - My Blog</title>
+    <title>{{title}} - ${blogTitle}</title>
     <meta name="description" content="{{description}}">
     
     <!-- Code Highlighting -->
@@ -223,7 +249,7 @@ function getBaseTemplate() {
 /**
  * 导航组件 - Developer Editorial Style
  */
-function getNav(currentPage = 'home') {
+function getNav(currentPage = 'home', blogTitle = 'My Blog') {
   const navContainerStyle = currentPage === 'post' ? 'max-width: 720px;' : '';
   
   return `
@@ -238,7 +264,7 @@ function getNav(currentPage = 'home') {
                 ` : `
                 <a href="/" class="nav-brand">
                     <span class="brand-icon">B</span>
-                    <span>My Blog</span>
+                    <span>${blogTitle}</span>
                 </a>
                 `}
             </div>
@@ -266,25 +292,49 @@ function getNav(currentPage = 'home') {
 /**
  * 页脚组件 - Developer Editorial Style
  */
-function getFooter(isPost = false) {
+function getFooter(isPost = false, config = { title: 'My Blog', about: null, friends: [] }) {
   const containerStyle = isPost ? 'max-width: 720px;' : '';
+  
+  // 判断是否显示关于区块
+  const showAbout = config.about && (config.about.description || config.about.avatar);
+  // 判断是否显示友链区块
+  const showFriends = config.friends && config.friends.length > 0;
+  
+  // 确定网格布局类
+  let gridClass = 'footer-grid';
+  if (!showAbout && !showFriends) {
+    gridClass = 'footer-grid footer-grid--single';
+  } else if (!showAbout || !showFriends) {
+    gridClass = 'footer-grid footer-grid--2col';
+  }
+  
+  // 生成关于区块 HTML
+  const aboutHTML = showAbout ? `
+    <div class="footer-about">
+      <h4 class="footer-title">关于</h4>
+      ${config.about.avatar ? `<img src="${config.about.avatar}" alt="avatar" class="footer-avatar">` : ''}
+      ${config.about.description ? `<p class="footer-desc">${config.about.description}</p>` : ''}
+    </div>
+  ` : '';
+  
+  // 生成友链区块 HTML
+  const friendsHTML = showFriends ? `
+    <div class="footer-links-group">
+      <h4 class="footer-title">友情链接</h4>
+      <ul class="footer-friends">
+        ${config.friends.map(friend => `
+          <li><a href="${friend.url}" target="_blank">${friend.name}</a></li>
+        `).join('')}
+      </ul>
+    </div>
+  ` : '';
   
   return `
     <footer class="footer">
         <div class="footer-container" style="${containerStyle}">
-            <div class="footer-grid">
-                <div class="footer-about">
-                    <h4 class="footer-title">关于</h4>
-                    <p class="footer-desc">热爱技术的开发者，分享编程心得与技术思考。记录学习历程，探索代码之美。</p>
-                </div>
-                <div class="footer-links-group">
-                    <h4 class="footer-title">友情链接</h4>
-                    <ul class="footer-friends">
-                        <li><a href="#" target="_blank">Example Blog</a></li>
-                        <li><a href="#" target="_blank">Tech Daily</a></li>
-                        <li><a href="#" target="_blank">Code Share</a></li>
-                    </ul>
-                </div>
+            <div class="${gridClass}">
+                ${aboutHTML}
+                ${friendsHTML}
                 <div class="footer-contact">
                     <h4 class="footer-title">联系方式</h4>
                     <div class="footer-social">
@@ -304,7 +354,7 @@ function getFooter(isPost = false) {
                 </div>
             </div>
             <div class="footer-bottom">
-                <p class="footer-copyright">© ${new Date().getFullYear()} My Blog. All rights reserved.</p>
+                <p class="footer-copyright">© ${new Date().getFullYear()} ${config.title}. All rights reserved.</p>
             </div>
         </div>
     </footer>`;
@@ -313,7 +363,7 @@ function getFooter(isPost = false) {
 /**
  * 生成文章列表页面
  */
-async function generateIndexPage(posts, tags, categories, archives) {
+async function generateIndexPage(posts, tags, categories, archives, config) {
   // Posts will be loaded dynamically by client-side JS for filtering to work
   const sidebarHTML = `
     <aside class="sidebar-section">
@@ -355,12 +405,12 @@ async function generateIndexPage(posts, tags, categories, archives) {
     </div>
   `;
 
-  let html = getBaseTemplate()
+  let html = getBaseTemplate(config.title)
     .replace('{{title}}', '首页')
     .replace('{{description}}', '个人博客，分享技术思考与实践')
-    .replace('{{nav}}', getNav('home'))
+    .replace('{{nav}}', getNav('home', config.title))
     .replace('{{content}}', content)
-    .replace('{{footer}}', getFooter());
+    .replace('{{footer}}', getFooter(false, config));
 
   await fs.writeFile(path.join(DIST_DIR, 'index.html'), html);
   console.log('✓ 生成 index.html');
@@ -369,7 +419,7 @@ async function generateIndexPage(posts, tags, categories, archives) {
 /**
  * 生成文章详情页面
  */
-async function generatePostPage(post, prev, next) {
+async function generatePostPage(post, prev, next, config) {
   const date = formatDate(post.meta.date);
   const originText = post.meta.origin === 'original' ? '原创' : '转载';
   
@@ -434,12 +484,12 @@ async function generatePostPage(post, prev, next) {
     </article>
   `;
 
-  let html = getBaseTemplate()
+  let html = getBaseTemplate(config.title)
     .replace('{{title}}', post.meta.title)
     .replace('{{description}}', post.meta.summary || generateExcerpt(post.body))
-    .replace('{{nav}}', getNav('post'))
+    .replace('{{nav}}', getNav('post', config.title))
     .replace('{{content}}', content)
-    .replace('{{footer}}', getFooter(true));
+    .replace('{{footer}}', getFooter(true, config));
 
   const postDir = path.join(DIST_DIR, 'posts');
   await ensureDir(postDir);
@@ -520,13 +570,19 @@ async function build() {
     archives.get(key).count++;
   });
   
+  // 加载配置
+  console.log('⚙️  加载配置...');
+  const config = await loadConfig();
+  console.log(`✓ 博客标题: ${config.title}\n`);
+  
   // 生成页面
   console.log('📦 生成页面...');
   await generateIndexPage(
     posts,
     Array.from(tags.entries()).sort((a, b) => b[1] - a[1]),
     Array.from(categories.entries()).sort((a, b) => b[1] - a[1]),
-    Array.from(archives.values()).sort((a, b) => b.key.localeCompare(a.key))
+    Array.from(archives.values()).sort((a, b) => b.key.localeCompare(a.key)),
+    config
   );
   
   // 生成每篇文章
@@ -534,7 +590,7 @@ async function build() {
     const post = posts[i];
     const prev = i < posts.length - 1 ? posts[i + 1] : null;
     const next = i > 0 ? posts[i - 1] : null;
-    await generatePostPage(post, prev, next);
+    await generatePostPage(post, prev, next, config);
   }
   
   // 生成数据文件
