@@ -15,3 +15,10 @@ friends:
     url: "https://github.com"
   - name: "Stack Overflow"
     url: "https://stackoverflow.com"
+
+# 联系方式（可选）
+social:
+  github: "https://github.com/username"
+  email: "email@example.com"
+  twitter: "https://twitter.com/username"
+  rss: "/feed.xml"

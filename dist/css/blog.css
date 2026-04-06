@@ -1159,6 +1159,16 @@ main {
   justify-content: center;
 }
 
+.footer-grid--empty {
+  display: none;
+}
+
+.footer-bottom--only {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
+
 @media (max-width: 768px) {
   .footer-grid,
   .footer-grid--2col,

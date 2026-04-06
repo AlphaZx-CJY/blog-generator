@@ -27,7 +27,8 @@ async function loadConfig() {
   const defaultConfig = {
     title: 'My Blog',
     about: null,
-    friends: []
+    friends: [],
+    social: null
   };
   
   try {
@@ -36,7 +37,8 @@ async function loadConfig() {
     return {
       title: config.title || defaultConfig.title,
       about: config.about || defaultConfig.about,
-      friends: config.friends || defaultConfig.friends
+      friends: config.friends || defaultConfig.friends,
+      social: config.social || defaultConfig.social
     };
   } catch {
     // 配置文件不存在或解析失败，使用默认配置
@@ -290,21 +292,52 @@ function getNav(currentPage = 'home', blogTitle = 'My Blog') {
 }
 
 /**
+ * 生成社交链接 HTML
+ */
+function generateSocialHTML(social) {
+  const iconMap = {
+    github: 'ph-github-logo',
+    email: 'ph-envelope',
+    twitter: 'ph-twitter-logo',
+    rss: 'ph-rss',
+    linkedin: 'ph-linkedin-logo',
+    weibo: 'ph-globe'
+  };
+  
+  return Object.entries(social).map(([platform, url]) => {
+    const icon = iconMap[platform] || 'ph-link';
+    const fullUrl = platform === 'email' && !url.startsWith('mailto:') 
+      ? `mailto:${url}` 
+      : url;
+    return `<a href="${fullUrl}" target="_blank" class="footer-link" aria-label="${platform}">
+      <i class="ph ${icon}"></i>
+    </a>`;
+  }).join('');
+}
+
+/**
  * 页脚组件 - Developer Editorial Style
  */
-function getFooter(isPost = false, config = { title: 'My Blog', about: null, friends: [] }) {
+function getFooter(isPost = false, config = { title: 'My Blog', about: null, friends: [], social: null }) {
   const containerStyle = isPost ? 'max-width: 720px;' : '';
   
   // 判断是否显示关于区块
   const showAbout = config.about && (config.about.description || config.about.avatar);
   // 判断是否显示友链区块
   const showFriends = config.friends && config.friends.length > 0;
+  // 判断是否显示联系方式区块
+  const showSocial = config.social && Object.keys(config.social).length > 0;
+  
+  // 计算显示多少个区块
+  const sectionCount = (showAbout ? 1 : 0) + (showFriends ? 1 : 0) + (showSocial ? 1 : 0);
   
   // 确定网格布局类
   let gridClass = 'footer-grid';
-  if (!showAbout && !showFriends) {
+  if (sectionCount === 0) {
+    gridClass = 'footer-grid footer-grid--empty';
+  } else if (sectionCount === 1) {
     gridClass = 'footer-grid footer-grid--single';
-  } else if (!showAbout || !showFriends) {
+  } else if (sectionCount === 2) {
     gridClass = 'footer-grid footer-grid--2col';
   }
   
@@ -329,29 +362,35 @@ function getFooter(isPost = false, config = { title: 'My Blog', about: null, fri
     </div>
   ` : '';
   
+  // 生成联系方式区块 HTML
+  const socialHTML = showSocial ? `
+    <div class="footer-contact">
+      <h4 class="footer-title">联系方式</h4>
+      <div class="footer-social">
+        ${generateSocialHTML(config.social)}
+      </div>
+    </div>
+  ` : '';
+  
+  // 如果所有区块都不显示，只保留版权
+  if (sectionCount === 0) {
+    return `
+      <footer class="footer">
+        <div class="footer-container" style="${containerStyle}">
+          <div class="footer-bottom footer-bottom--only">
+            <p class="footer-copyright">© ${new Date().getFullYear()} ${config.title}. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>`;
+  }
+  
   return `
     <footer class="footer">
         <div class="footer-container" style="${containerStyle}">
             <div class="${gridClass}">
                 ${aboutHTML}
                 ${friendsHTML}
-                <div class="footer-contact">
-                    <h4 class="footer-title">联系方式</h4>
-                    <div class="footer-social">
-                        <a href="#" target="_blank" class="footer-link" aria-label="GitHub">
-                            <i class="ph ph-github-logo"></i>
-                        </a>
-                        <a href="mailto:example@email.com" class="footer-link" aria-label="Email">
-                            <i class="ph ph-envelope"></i>
-                        </a>
-                        <a href="#" target="_blank" class="footer-link" aria-label="Twitter">
-                            <i class="ph ph-twitter-logo"></i>
-                        </a>
-                        <a href="#" target="_blank" class="footer-link" aria-label="RSS">
-                            <i class="ph ph-rss"></i>
-                        </a>
-                    </div>
-                </div>
+                ${socialHTML}
             </div>
             <div class="footer-bottom">
                 <p class="footer-copyright">© ${new Date().getFullYear()} ${config.title}. All rights reserved.</p>
