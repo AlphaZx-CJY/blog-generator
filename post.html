@@ -3,106 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文章 - My Blog</title>
-    
-    <!-- Code Highlighting -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" disabled>
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="css/blog.css">
+    <title>重定向...</title>
+    <!-- 
+        注意：开发时请使用 npm run dev 启动开发服务器
+        此文件仅为占位文件，实际内容在 dist/ 目录中
+    -->
+    <meta http-equiv="refresh" content="0; url=dist/index.html">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        a {
+            color: #0066cc;
+        }
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="nav-bar">
-        <div class="nav-container" style="max-width: 720px;">
-            <div class="flex items-center gap-4">
-                <a href="index.html" class="nav-brand">
-                    <span class="brand-icon">B</span>
-                </a>
-                <span style="color: var(--text-tertiary);">/</span>
-                <a href="index.html" class="nav-link">博客</a>
-            </div>
-            <div class="nav-actions">
-                <button id="searchToggle" class="icon-btn" aria-label="搜索 (Cmd+K)">🔍</button>
-                <button id="themeToggle" class="icon-btn" aria-label="切换主题">◐</button>
-            </div>
-        </div>
-        
-        <!-- Search Panel -->
-        <div id="searchPanel" class="search-panel">
-            <div class="search-wrapper">
-                <div class="search-input-wrapper">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" id="searchInput" placeholder="搜索文章..." class="search-input">
-                    <kbd class="search-shortcut">ESC</kbd>
-                </div>
-                <div id="searchResults" class="search-results"></div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Article -->
-    <main>
-        <article class="max-w-3xl mx-auto px-6 pb-20">
-            <!-- Post Header -->
-            <header id="postHeader" class="post-header">
-                <div class="loading-state">
-                    <div class="spinner"></div>
-                </div>
-            </header>
-
-            <!-- Table of Contents - Desktop Only -->
-            <div id="tocContainer" class="toc-container">
-                <div class="toc-sticky">
-                    <h4 class="toc-title">目录</h4>
-                    <nav id="tocNav" class="toc-nav"></nav>
-                </div>
-            </div>
-
-            <!-- Post Content -->
-            <div id="postContent" class="post-content">
-                <div class="loading-state">
-                    <div class="spinner"></div>
-                    <p>正在加载文章...</p>
-                </div>
-            </div>
-
-            <!-- Post Footer -->
-            <footer id="postFooter" class="post-footer"></footer>
-
-            <!-- Post Navigation -->
-            <nav id="postNav" class="post-nav"></nav>
-
-            <!-- Comments -->
-            <section id="comments" class="comments-section">
-                <h3 class="comments-title">评论</h3>
-                <div class="comments-list">
-                    <div class="comments-empty">
-                        <p>评论功能需要接入外部服务</p>
-                    </div>
-                </div>
-            </section>
-        </article>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container" style="max-width: 720px;">
-            <div class="footer-content">
-                <p class="footer-text">© 2026 My Blog</p>
-                <div class="footer-links">
-                    <a href="#" target="_blank" class="footer-link" aria-label="GitHub">GH</a>
-                    <a href="mailto:example@email.com" class="footer-link" aria-label="Email">@</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Back to Top -->
-    <button id="backToTop" class="back-to-top" aria-label="回到顶部">↑</button>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="js/app.js"></script>
+    <div class="container">
+        <p>正在跳转到 <a href="dist/index.html">构建结果</a>...</p>
+        <p>开发请使用：<code>npm run dev</code></p>
+    </div>
 </body>
 </html>
