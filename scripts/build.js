@@ -28,7 +28,8 @@ async function loadConfig() {
     title: 'My Blog',
     about: null,
     friends: [],
-    social: null
+    social: null,
+    comments: null
   };
   
   try {
@@ -38,7 +39,8 @@ async function loadConfig() {
       title: config.title || defaultConfig.title,
       about: config.about || defaultConfig.about,
       friends: config.friends || defaultConfig.friends,
-      social: config.social || defaultConfig.social
+      social: config.social || defaultConfig.social,
+      comments: config.comments || defaultConfig.comments
     };
   } catch {
     // 配置文件不存在或解析失败，使用默认配置
@@ -316,6 +318,41 @@ function generateSocialHTML(social) {
 }
 
 /**
+ * 生成评论组件 HTML
+ */
+function generateCommentsHTML(comments) {
+  if (!comments || !comments.provider) {
+    return ''; // 不配置则不显示评论
+  }
+  
+  if (comments.provider === 'giscus') {
+    return `
+        <section class="comments-section">
+            <h3 class="comments-title">评论</h3>
+            <div class="giscus"></div>
+            <script src="https://giscus.app/client.js"
+              data-repo="${comments.repo || ''}"
+              data-repo-id="${comments.repoId || ''}"
+              data-category="${comments.category || 'General'}"
+              data-category-id="${comments.categoryId || ''}"
+              data-mapping="${comments.mapping || 'pathname'}"
+              data-strict="${comments.strict ? '1' : '0'}"
+              data-reactions-enabled="${comments.reactionsEnabled !== false ? '1' : '0'}"
+              data-emit-metadata="0"
+              data-input-position="bottom"
+              data-theme="preferred_color_scheme"
+              data-lang="zh-CN"
+              crossorigin="anonymous"
+              async>
+            </script>
+        </section>
+    `;
+  }
+  
+  return '';
+}
+
+/**
  * 页脚组件 - Developer Editorial Style
  */
 function getFooter(isPost = false, config = { title: 'My Blog', about: null, friends: [], social: null }) {
@@ -512,14 +549,7 @@ async function generatePostPage(post, prev, next, config) {
             ` : '<div></div>'}
         </nav>
 
-        <section class="comments-section">
-            <h3 class="comments-title">评论</h3>
-            <div class="comments-list">
-                <div class="comments-empty">
-                    <p>评论功能需要接入外部服务</p>
-                </div>
-            </div>
-        </section>
+        ${generateCommentsHTML(config.comments)}
     </article>
   `;
 
