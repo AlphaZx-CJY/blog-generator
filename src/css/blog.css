@@ -814,8 +814,10 @@ main {
   position: fixed;
   right: calc((100vw - 720px) / 2 - 220px);
   top: 100px;
+  bottom: 280px;
   width: 200px;
   display: none;
+  overflow-y: auto;
 }
 
 @media (min-width: 1280px) {
