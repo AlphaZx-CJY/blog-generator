@@ -538,20 +538,22 @@ async function generatePostPage(post, prev, next, config) {
             ` : ''}
         </footer>
 
+        ${(prev || next) ? `
         <nav class="post-nav">
             ${prev ? `
                 <a href="./${prev.id}.html" class="post-nav-item">
                     <div class="post-nav-label">← 上一篇</div>
                     <div class="post-nav-title">${prev.meta.title}</div>
                 </a>
-            ` : '<div></div>'}
+            ` : ''}
             ${next ? `
                 <a href="./${next.id}.html" class="post-nav-item next">
                     <div class="post-nav-label">下一篇 →</div>
                     <div class="post-nav-title">${next.meta.title}</div>
                 </a>
-            ` : '<div></div>'}
+            ` : ''}
         </nav>
+        ` : ''}
 
         ${generateCommentsHTML(config.comments)}
     </article>

@@ -36,6 +36,7 @@ export class ThemeToggle {
     const isDark = document.documentElement.classList.toggle('dark');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
     this.updateCodeTheme(isDark);
+    this.updateGiscusTheme(isDark);
   }
 
   /**
@@ -48,6 +49,22 @@ export class ThemeToggle {
     if (lightTheme && darkTheme) {
       lightTheme.disabled = isDark;
       darkTheme.disabled = !isDark;
+    }
+  }
+
+  /**
+   * 更新 Giscus 评论主题
+   */
+  private updateGiscusTheme(isDark: boolean): void {
+    const theme = isDark ? 'dark' : 'light';
+    
+    // 发送消息给 Giscus iframe
+    const iframe = document.querySelector('iframe.giscus-frame') as HTMLIFrameElement;
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage(
+        { giscus: { setConfig: { theme } } },
+        'https://giscus.app'
+      );
     }
   }
 
