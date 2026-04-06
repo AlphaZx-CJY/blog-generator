@@ -846,6 +846,7 @@
               link.classList.remove("active");
               if (link.getAttribute("href") === `#${id}`) {
                 link.classList.add("active");
+                link.scrollIntoView({ behavior: "smooth", block: "nearest" });
               }
             });
           }

@@ -108,6 +108,8 @@ export class TOC {
             link.classList.remove('active');
             if (link.getAttribute('href') === `#${id}`) {
               link.classList.add('active');
+              // 将激活项滚动到目录可视区域
+              link.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
           });
         }
