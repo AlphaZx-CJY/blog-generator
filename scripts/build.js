@@ -29,18 +29,37 @@ async function loadConfig() {
     about: null,
     friends: [],
     social: null,
-    comments: null
+    comments: null,
+    rss: null
   };
   
   try {
     const content = await fs.readFile(CONFIG_FILE, 'utf-8');
     const config = yaml.load(content) || {};
+    
+    // 处理 RSS 配置
+    const rssConfig = config.rss || null;
+    let socialConfig = config.social || null;
+    
+    // 如果启用了自动生成 RSS，且 social 中没有配置 rss 链接，则自动添加
+    if (rssConfig && rssConfig.enabled) {
+      const rssFilename = rssConfig.filename || 'feed.xml';
+      const rssUrl = `/${rssFilename}`;
+      
+      if (!socialConfig) {
+        socialConfig = { rss: rssUrl };
+      } else if (!socialConfig.rss) {
+        socialConfig = { ...socialConfig, rss: rssUrl };
+      }
+    }
+    
     return {
       title: config.title || defaultConfig.title,
       about: config.about || defaultConfig.about,
       friends: config.friends || defaultConfig.friends,
-      social: config.social || defaultConfig.social,
-      comments: config.comments || defaultConfig.comments
+      social: socialConfig,
+      comments: config.comments || defaultConfig.comments,
+      rss: rssConfig
     };
   } catch {
     // 配置文件不存在或解析失败，使用默认配置
@@ -591,6 +610,71 @@ async function generateDataFile(posts) {
 }
 
 /**
+ * 生成 RSS 文件
+ */
+async function generateRSS(posts, config) {
+  const rssConfig = config.rss || {};
+  const filename = rssConfig.filename || 'feed.xml';
+  const rssUrl = `/${filename}`;
+  
+  // 转义 XML 特殊字符
+  const escapeXml = (str) => {
+    if (!str) return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+  };
+  
+  // 生成 RSS 日期格式 (RFC 822)
+  const formatRSSDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toUTCString();
+  };
+  
+  // 生成文章条目
+  const generateItems = () => {
+    return posts.map(post => {
+      const date = formatRSSDate(post.meta.date);
+      const link = `/posts/${post.id}.html`;
+      const excerpt = generateExcerpt(post.body, 500);
+      
+      return `    <item>
+      <title>${escapeXml(post.meta.title)}</title>
+      <link>${link}</link>
+      <guid>${link}</guid>
+      <pubDate>${date}</pubDate>
+      <description>${escapeXml(excerpt)}</description>
+      ${post.meta.category ? `<category>${escapeXml(post.meta.category)}</category>` : ''}
+      ${post.meta.tags.map(tag => `<category>${escapeXml(tag)}</category>`).join('\n      ')}
+    </item>`;
+    }).join('\n');
+  };
+  
+  const now = new Date().toUTCString();
+  const blogTitle = escapeXml(config.title);
+  const blogDescription = escapeXml(config.about?.description || `${config.title} - 个人博客`);
+  
+  const rssContent = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>${blogTitle}</title>
+    <link>/</link>
+    <description>${blogDescription}</description>
+    <language>zh-CN</language>
+    <lastBuildDate>${now}</lastBuildDate>
+    <atom:link href="${rssUrl}" rel="self" type="application/rss+xml" />
+${generateItems()}
+  </channel>
+</rss>`;
+  
+  await fs.writeFile(path.join(DIST_DIR, filename), rssContent, 'utf-8');
+  console.log(`✓ 生成 ${filename}`);
+}
+
+/**
  * 主构建函数
  */
 async function build() {
@@ -670,6 +754,12 @@ async function build() {
   
   // 生成数据文件
   await generateDataFile(posts);
+  
+  // 生成 RSS 文件（如果启用）
+  if (config.rss && config.rss.enabled) {
+    console.log('\n📡 生成 RSS...');
+    await generateRSS(posts, config);
+  }
   
   // 复制静态资源
   console.log('\n📂 复制静态资源...');
