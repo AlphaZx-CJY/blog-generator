@@ -615,7 +615,9 @@ async function generateDataFile(posts) {
 async function generateRSS(posts, config) {
   const rssConfig = config.rss || {};
   const filename = rssConfig.filename || 'feed.xml';
-  const rssUrl = `/${filename}`;
+  // 支持项目站点的 baseUrl 配置（如 /blog）
+  const baseUrl = rssConfig.baseUrl || '';
+  const rssUrl = `${baseUrl}/${filename}`;
   
   // 转义 XML 特殊字符
   const escapeXml = (str) => {
@@ -638,7 +640,7 @@ async function generateRSS(posts, config) {
   const generateItems = () => {
     return posts.map(post => {
       const date = formatRSSDate(post.meta.date);
-      const link = `/posts/${post.id}.html`;
+      const link = `${baseUrl}/posts/${post.id}.html`;
       const excerpt = generateExcerpt(post.body, 500);
       
       return `    <item>
@@ -661,7 +663,7 @@ async function generateRSS(posts, config) {
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${blogTitle}</title>
-    <link>/</link>
+    <link>${baseUrl}/</link>
     <description>${blogDescription}</description>
     <language>zh-CN</language>
     <lastBuildDate>${now}</lastBuildDate>
