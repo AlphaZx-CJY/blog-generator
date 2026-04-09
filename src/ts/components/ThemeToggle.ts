@@ -4,6 +4,7 @@
 
 export class ThemeToggle {
   private button: HTMLElement | null;
+  private giscusSyncTimer: number | null = null;
 
   constructor() {
     this.button = document.getElementById('themeToggle');
@@ -27,6 +28,43 @@ export class ThemeToggle {
     this.button?.addEventListener('click', () => {
       this.toggle();
     });
+
+    // 同步 Giscus 主题（延迟执行，等待 Giscus 加载）
+    this.syncGiscusOnLoad();
+  }
+
+  /**
+   * 页面加载后同步 Giscus 主题
+   * 解决从其他页面切换主题后进入文章页时 Giscus 主题不同步的问题
+   */
+  private syncGiscusOnLoad(): void {
+    // 清除之前的定时器
+    if (this.giscusSyncTimer) {
+      clearTimeout(this.giscusSyncTimer);
+    }
+
+    let attempts = 0;
+    const maxAttempts = 50; // 最多尝试 5 秒
+    const isDark = this.isDark();
+
+    const trySync = () => {
+      attempts++;
+      const iframe = document.querySelector('iframe.giscus-frame') as HTMLIFrameElement;
+      
+      if (iframe && iframe.contentWindow) {
+        // Giscus 已加载，同步主题
+        this.updateGiscusTheme(isDark);
+        return;
+      }
+      
+      // 继续尝试
+      if (attempts < maxAttempts) {
+        this.giscusSyncTimer = window.setTimeout(trySync, 100);
+      }
+    };
+
+    // 延迟开始，给 Giscus 脚本加载时间
+    this.giscusSyncTimer = window.setTimeout(trySync, 500);
   }
 
   /**
