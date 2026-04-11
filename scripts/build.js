@@ -355,6 +355,20 @@ function generateCommentsHTML(comments) {
         <section class="comments-section">
             <h3 class="comments-title">评论</h3>
             <div class="giscus"></div>
+            <script>
+              // 在 Giscus 加载前设置主题，确保与页面主题一致
+              (function() {
+                const savedTheme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const isDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+                
+                // 设置 giscus 主题属性，供 client.js 读取
+                const giscusDiv = document.querySelector('.giscus');
+                if (giscusDiv) {
+                  giscusDiv.dataset.theme = isDark ? 'dark' : 'light';
+                }
+              })();
+            </script>
             <script src="https://giscus.app/client.js"
               data-repo="${comments.repo || ''}"
               data-repo-id="${comments.repoId || ''}"
@@ -365,7 +379,6 @@ function generateCommentsHTML(comments) {
               data-reactions-enabled="${comments.reactionsEnabled !== false ? '1' : '0'}"
               data-emit-metadata="0"
               data-input-position="bottom"
-              data-theme="preferred_color_scheme"
               data-lang="zh-CN"
               crossorigin="anonymous"
               async>
