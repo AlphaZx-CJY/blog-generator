@@ -356,32 +356,30 @@ function generateCommentsHTML(comments) {
             <h3 class="comments-title">评论</h3>
             <div class="giscus"></div>
             <script>
-              // 在 Giscus 加载前设置主题，确保与页面主题一致
+              // 动态加载 Giscus，确保主题设置正确
               (function() {
                 const savedTheme = localStorage.getItem('theme');
                 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                const isDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+                const theme = savedTheme === 'dark' || (!savedTheme && prefersDark) ? 'dark' : 'light';
                 
-                // 设置 giscus 主题属性，供 client.js 读取
-                const giscusDiv = document.querySelector('.giscus');
-                if (giscusDiv) {
-                  giscusDiv.dataset.theme = isDark ? 'dark' : 'light';
-                }
+                const script = document.createElement('script');
+                script.src = 'https://giscus.app/client.js';
+                script.setAttribute('data-repo', '${comments.repo || ''}');
+                script.setAttribute('data-repo-id', '${comments.repoId || ''}');
+                script.setAttribute('data-category', '${comments.category || 'General'}');
+                script.setAttribute('data-category-id', '${comments.categoryId || ''}');
+                script.setAttribute('data-mapping', '${comments.mapping || 'pathname'}');
+                script.setAttribute('data-strict', '${comments.strict ? '1' : '0'}');
+                script.setAttribute('data-reactions-enabled', '${comments.reactionsEnabled !== false ? '1' : '0'}');
+                script.setAttribute('data-emit-metadata', '0');
+                script.setAttribute('data-input-position', 'bottom');
+                script.setAttribute('data-theme', theme);
+                script.setAttribute('data-lang', 'zh-CN');
+                script.setAttribute('crossorigin', 'anonymous');
+                script.async = true;
+                
+                document.currentScript.parentNode.insertBefore(script, document.currentScript);
               })();
-            </script>
-            <script src="https://giscus.app/client.js"
-              data-repo="${comments.repo || ''}"
-              data-repo-id="${comments.repoId || ''}"
-              data-category="${comments.category || 'General'}"
-              data-category-id="${comments.categoryId || ''}"
-              data-mapping="${comments.mapping || 'pathname'}"
-              data-strict="${comments.strict ? '1' : '0'}"
-              data-reactions-enabled="${comments.reactionsEnabled !== false ? '1' : '0'}"
-              data-emit-metadata="0"
-              data-input-position="bottom"
-              data-lang="zh-CN"
-              crossorigin="anonymous"
-              async>
             </script>
         </section>
     `;
