@@ -247,12 +247,9 @@ function getBaseTemplate(blogTitle = 'My Blog', basePath = './') {
     <title>{{title}} - ${blogTitle}</title>
     <meta name="description" content="{{description}}">
     
-    <!-- Code Highlighting -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" disabled>
-    
-    <!-- Phosphor Icons -->
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Code Highlighting (本地资源) -->
+    <link rel="stylesheet" href="${basePath}css/highlight-github.min.css" id="hljs-light">
+    <link rel="stylesheet" href="${basePath}css/highlight-github-dark.min.css" id="hljs-dark" disabled>
     
     <!-- Styles -->
     <link rel="stylesheet" href="${basePath}css/blog.css">
@@ -299,16 +296,16 @@ function getNav(currentPage = 'home', blogTitle = 'My Blog') {
             </div>
             <div class="nav-actions">
                 <button id="searchToggle" class="icon-btn" aria-label="搜索 (Cmd+K)">
-                    <i class="ph ph-magnifying-glass" style="font-size: 18px;"></i>
+                    ${svgIcons.search}
                 </button>
-                <button id="themeToggle" class="icon-btn" aria-label="切换主题"><i class="ph ph-sun" style="font-size: 18px;"></i></button>
+                <button id="themeToggle" class="icon-btn" aria-label="切换主题">${svgIcons.sun}</button>
             </div>
         </div>
         <!-- Search Panel -->
         <div id="searchPanel" class="search-panel">
             <div class="search-wrapper">
                 <div class="search-input-wrapper">
-                    <span class="search-icon"><i class="ph ph-magnifying-glass" style="font-size: 16px;"></i></span>
+                    <span class="search-icon" style="display:flex;align-items:center;">${svgIcons.search}</span>
                     <input type="text" id="searchInput" placeholder="搜索文章..." class="search-input">
                     <kbd class="search-shortcut">ESC</kbd>
                 </div>
@@ -319,25 +316,40 @@ function getNav(currentPage = 'home', blogTitle = 'My Blog') {
 }
 
 /**
+ * SVG 图标定义
+ */
+const svgIcons = {
+  search: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>`,
+  sun: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor"><path d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm72,88a64,64,0,1,1-64-64A64.07,64.07,0,0,1,192,128Zm-16,0a48,48,0,1,0-48,48A48.05,48.05,0,0,0,176,128ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM40,120H16a8,8,0,0,0,0,16H40a8,8,0,0,0,0-16Zm88,88a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z"/></svg>`,
+  github: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H112A59.75,59.75,0,0,0,64,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.58,39.58,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V202.46a39.58,39.58,0,0,0-8.44-24.61A56.13,56.13,0,0,0,160,160h8a56.13,56.13,0,0,0,56.44-55.47V104A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-40,40H160a39.58,39.58,0,0,0-8.44-24.61A56.13,56.13,0,0,0,168,112h8A40,40,0,0,1,200,112Z"/></svg>`,
+  email: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48Zm-96,85.15L52.57,64H203.43ZM98.71,128,40,181.81V74.19Zm11.84,10.85,12,11.05a8,8,0,0,0,10.82,0l12-11.05,58,53.15H52.57ZM157.29,128,216,74.18V181.82Z"/></svg>`,
+  twitter: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M247.39,68.94A8,8,0,0,0,240,64H209.57A48.66,48.66,0,0,0,168.1,40a46.91,46.91,0,0,0-33.75,30.72,48,48,0,0,0-89.63,18.64A44.12,44.12,0,0,0,16,80v.41a8,8,0,0,0,4.76,7.29l.08,0A91.24,91.24,0,0,0,59,110.86l-14.36,5.1A8,8,0,0,0,40.5,127.32l12.18,34.55a8,8,0,0,0,11.21,4.53l13-5.61A100.64,100.64,0,0,0,128,168a100.34,100.34,0,0,0,51.11-14.32l13,5.61a8,8,0,0,0,11.21-4.53l12.18-34.55a8,8,0,0,0-4.15-10.15l-14.36-5.1a91.24,91.24,0,0,0,38.16-23.12l.08,0A8,8,0,0,0,247.39,68.94ZM64.1,115.31a75.25,75.25,0,0,1-23.25-6.56,76.26,76.26,0,0,1,18-18A76.14,76.14,0,0,1,64.1,115.31Zm61.81,34.15-17.8,7.67-9.08-25.77,17.8-7.67a60.21,60.21,0,0,1,9.08,25.77Zm34.22,7.67-17.8-7.67a60.21,60.21,0,0,1,9.08-25.77l17.8,7.67Zm-34.22-43.72a76.14,76.14,0,0,1-5.27-24.61,76.26,76.26,0,0,1,18-18,75.25,75.25,0,0,1-23.25,6.56A76.5,76.5,0,0,1,125.91,113.41Z"/></svg>`,
+  rss: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M220.82,164.55a8,8,0,0,1-10.37,4.51A95.09,95.09,0,0,0,164.17,156a8,8,0,0,1,0-16,79.37,79.37,0,0,1,44.14,12.32A8,8,0,0,1,220.82,164.55Zm-24.31,28.3c-20.78,0-40.84-6.37-57.69-18.43a8,8,0,0,0-9.14,13.12c19.54,13.6,42.48,20.79,66.21,20.31a8,8,0,0,0,.31-16Zm-39.43-79.78a8,8,0,0,0,1.5-15.88A175.91,175.91,0,0,0,40,40a8,8,0,0,0,0,16,160,8,8,0,0,1,7.89,6.85,160,8,8,0,0,0,113.12,49.2A8,8,0,0,0,157.08,113.07ZM44,120a8,8,0,0,0,0,16,48.05,48.05,0,0,1,48,48,8,8,0,0,0,16,0A64.07,64.07,0,0,0,44,120Z"/></svg>`,
+  linkedin: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M216,24H40A16,16,0,0,0,24,40V216a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V40A16,16,0,0,0,216,24Zm0,192H40V40H216V216ZM96,112v64a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Zm-8-28a12,12,0,1,1,12-12A12,12,0,0,1,88,84Zm100,28v64a8,8,0,0,1-16,0V140a24,24,0,0,0-48,0v36a8,8,0,0,1-16,0V112a8,8,0,0,1,15.79-1.78A40,40,0,0,1,188,112Z"/></svg>`,
+  globe: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,16a87.62,87.62,0,0,1,48.31,14.6c-21.1,5.24-44.61,17.41-63.38,35.62A189.33,189.33,0,0,1,97.57,47.4,88.43,88.43,0,0,1,128,40Zm-39.82,12.32a173.49,173.49,0,0,0,15.36,24.08A178,178,0,0,1,56.46,79.54,88.09,88.09,0,0,1,88.18,52.32ZM40,128a87.56,87.56,0,0,1,9.64-39.89,163.65,163.65,0,0,0,36.07,9.59A165.64,165.64,0,0,0,81.29,128c0,21.07-4.42,40.18-11.56,55.34-21.82-4.5-40.61-17.09-53-34.82A87.55,87.55,0,0,1,40,128Zm8.35,63.38a148.29,148.29,0,0,1,44.47-9.61c2.33,11.89,6.06,23.17,10.71,33.25A107.63,107.63,0,0,1,86.44,186.8,88.24,88.24,0,0,1,48.35,191.38Zm76.39-5.13c-6.88-11.15-11.73-23.48-14.27-36.25h45.06c-2.54,12.77-7.39,25.1-14.27,36.25ZM112,128c0-11.87,1.36-23.42,3.88-34.29h25.76c2.52,10.87,3.88,22.42,3.88,34.29s-1.36,23.42-3.88,34.29H115.88C113.36,151.42,112,139.87,112,128Zm1.74-50.29c4.65-10.08,8.38-21.36,10.71-33.25a148.29,148.29,0,0,1,44.47,9.61,88.24,88.24,0,0,1-38.09,4.42C119.71,79.76,117.12,79.42,113.74,77.71Zm52.77-8.3c21.1,5.24,44.61,17.41,63.38,35.62a189.33,189.33,0,0,1-13.37,27.82A176.52,176.52,0,0,0,166.51,69.41ZM208,128a88.43,88.43,0,0,1-4.83,28.95,173.49,173.49,0,0,0-15.36-24.08A178,178,0,0,1,199.54,176.46,88.09,88.09,0,0,1,208,128Z"/></svg>`,
+  link: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M240,88.23a54.43,54.43,0,0,1-16,38.1L201.42,149A54.41,54.41,0,0,1,148.23,176l-.26,0a54.34,54.34,0,0,1-38.62-16l-4.66-4.66a8,8,0,0,1,11.32-11.32l4.66,4.66a38.43,38.43,0,0,0,54.28,0l22.59-22.58a38.43,38.43,0,0,0-54.28-54.28l-4.66,4.66a8,8,0,0,1-11.32-11.32l4.66-4.66A54.43,54.43,0,0,1,148,56.1a54.34,54.34,0,0,1,38.62,16L208,93.52A54.44,54.44,0,0,1,240,88.23Zm-122.83,49.24-4.66,4.66a38.43,38.43,0,0,1-54.28,0L35.64,119.55a38.43,38.43,0,0,1,54.28-54.28l4.66,4.66a8,8,0,0,0,11.32-11.32l-4.66-4.66A54.43,54.43,0,0,0,56.1,48,54.34,54.34,0,0,0,17.48,64L16,65.42A54.41,54.41,0,0,0,16,150.19l22.58,22.59a54.43,54.43,0,0,0,77.13,0l4.66-4.66a8,8,0,0,0-11.32-11.32Z"/></svg>`
+};
+
+/**
  * 生成社交链接 HTML
  */
 function generateSocialHTML(social) {
   const iconMap = {
-    github: 'ph-github-logo',
-    email: 'ph-envelope',
-    twitter: 'ph-twitter-logo',
-    rss: 'ph-rss',
-    linkedin: 'ph-linkedin-logo',
-    weibo: 'ph-globe'
+    github: svgIcons.github,
+    email: svgIcons.email,
+    twitter: svgIcons.twitter,
+    rss: svgIcons.rss,
+    linkedin: svgIcons.linkedin,
+    weibo: svgIcons.globe
   };
   
   return Object.entries(social).map(([platform, url]) => {
-    const icon = iconMap[platform] || 'ph-link';
+    const icon = iconMap[platform] || svgIcons.link;
     const fullUrl = platform === 'email' && !url.startsWith('mailto:') 
       ? `mailto:${url}` 
       : url;
     return `<a href="${fullUrl}" target="_blank" class="footer-link" aria-label="${platform}">
-      <i class="ph ${icon}"></i>
+      ${icon}
     </a>`;
   }).join('');
 }
@@ -351,38 +363,9 @@ function generateCommentsHTML(comments) {
   }
   
   if (comments.provider === 'giscus') {
-    return `
-        <section class="comments-section">
-            <h3 class="comments-title">评论</h3>
-            <div class="giscus"></div>
-            <script>
-              // 动态加载 Giscus，确保主题设置正确
-              (function() {
-                const savedTheme = localStorage.getItem('theme');
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                const theme = savedTheme === 'dark' || (!savedTheme && prefersDark) ? 'dark' : 'light';
-                
-                const script = document.createElement('script');
-                script.src = 'https://giscus.app/client.js';
-                script.setAttribute('data-repo', '${comments.repo || ''}');
-                script.setAttribute('data-repo-id', '${comments.repoId || ''}');
-                script.setAttribute('data-category', '${comments.category || 'General'}');
-                script.setAttribute('data-category-id', '${comments.categoryId || ''}');
-                script.setAttribute('data-mapping', '${comments.mapping || 'pathname'}');
-                script.setAttribute('data-strict', '${comments.strict ? '1' : '0'}');
-                script.setAttribute('data-reactions-enabled', '${comments.reactionsEnabled !== false ? '1' : '0'}');
-                script.setAttribute('data-emit-metadata', '0');
-                script.setAttribute('data-input-position', 'bottom');
-                script.setAttribute('data-theme', theme);
-                script.setAttribute('data-lang', 'zh-CN');
-                script.setAttribute('crossorigin', 'anonymous');
-                script.async = true;
-                
-                document.currentScript.parentNode.insertBefore(script, document.currentScript);
-              })();
-            </script>
-        </section>
-    `;
+    // Giscus 在国内无法访问，暂时禁用
+    // 如需评论功能，建议替换为 Valine、Twikoo 等国内可用方案
+    return '';
   }
   
   return '';
