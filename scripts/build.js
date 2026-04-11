@@ -363,9 +363,38 @@ function generateCommentsHTML(comments) {
   }
   
   if (comments.provider === 'giscus') {
-    // Giscus 在国内无法访问，暂时禁用
-    // 如需评论功能，建议替换为 Valine、Twikoo 等国内可用方案
-    return '';
+    return `
+        <section class="comments-section">
+            <h3 class="comments-title">评论</h3>
+            <div class="giscus"></div>
+            <script>
+              // 动态加载 Giscus，确保主题设置正确
+              (function() {
+                const savedTheme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const theme = savedTheme === 'dark' || (!savedTheme && prefersDark) ? 'dark' : 'light';
+                
+                const script = document.createElement('script');
+                script.src = 'https://giscus.app/client.js';
+                script.setAttribute('data-repo', '${comments.repo || ''}');
+                script.setAttribute('data-repo-id', '${comments.repoId || ''}');
+                script.setAttribute('data-category', '${comments.category || 'General'}');
+                script.setAttribute('data-category-id', '${comments.categoryId || ''}');
+                script.setAttribute('data-mapping', '${comments.mapping || 'pathname'}');
+                script.setAttribute('data-strict', '${comments.strict ? '1' : '0'}');
+                script.setAttribute('data-reactions-enabled', '${comments.reactionsEnabled !== false ? '1' : '0'}');
+                script.setAttribute('data-emit-metadata', '0');
+                script.setAttribute('data-input-position', 'bottom');
+                script.setAttribute('data-theme', theme);
+                script.setAttribute('data-lang', 'zh-CN');
+                script.setAttribute('crossorigin', 'anonymous');
+                script.async = true;
+                
+                document.currentScript.parentNode.insertBefore(script, document.currentScript);
+              })();
+            </script>
+        </section>
+    `;
   }
   
   return '';
