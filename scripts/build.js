@@ -110,6 +110,25 @@ async function copyStatic() {
     // 文件不存在，跳过
   }
   
+  // 复制 highlight.js CSS 主题文件
+  const hljsStyles = [
+    { src: 'github.min.css', dest: 'highlight-github.min.css' },
+    { src: 'github-dark.min.css', dest: 'highlight-github-dark.min.css' }
+  ];
+  
+  const hljsStylesDir = path.join(ROOT_DIR, 'node_modules', 'highlight.js', 'styles');
+  for (const { src, dest } of hljsStyles) {
+    try {
+      const srcPath = path.join(hljsStylesDir, src);
+      const destPath = path.join(DIST_DIR, 'css', dest);
+      await fs.access(srcPath);
+      await fs.copyFile(srcPath, destPath);
+      console.log(`✓ 复制 css/${dest}`);
+    } catch {
+      console.warn(`⚠ 未找到 highlight.js 样式: ${src}`);
+    }
+  }
+  
   // 确保 dist/js 目录存在（TypeScript 构建已生成 app.js）
   const jsDestDir = path.join(DIST_DIR, 'js');
   await ensureDir(jsDestDir);
